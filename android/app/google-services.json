@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "389377800962",
+    "firebase_url": "https://fcm-squad-maker-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "fcm-squad-maker",
+    "storage_bucket": "fcm-squad-maker.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:389377800962:android:d4f6e9c9ab936af770601b",
+        "android_client_info": {
+          "package_name": "com.quasar.fcmobile_squad_maker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYWoM5yMw7RnUs_MOCQ31wILT1tQWYZ1I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
