@@ -43,6 +43,10 @@ class _PlayerDetailPageState extends State<PlayerDetailPage> {
       appBar: AppBar(
         title: Text(player.name),
         centerTitle: false,
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: Icon(Icons.chevron_left),
+        ),
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -108,9 +112,10 @@ class _PlayerDetailPageState extends State<PlayerDetailPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
+                    SizedBox(height: 20,),
                     Text(player.position+" "+player.overall.toString()),
-                    IconButton(icon:Icon(IconSrc.shoe_prints,size: 40,),onPressed: () {},),
-                    SizedBox(width: 40,),
+                    Text("foot (L:"+player.l_foot.toString()+" R:"+player.r_foot.toString()+")"),
+                    SizedBox(height: 20,),
                     DropdownButton(
                       value: _enforce,
                       items: enforce.map((e) => DropdownMenuItem(

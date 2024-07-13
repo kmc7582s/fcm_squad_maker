@@ -4,7 +4,14 @@ import 'package:flutter/material.dart';
 class Fonts {
   Fonts._();
 
-  static final TextStyle largeTitle = GoogleFonts.roboto(
+  static final TextStyle test = GoogleFonts.rubik(
+      fontSize: 16,
+      fontWeight: FontWeight.w700,
+      letterSpacing: 1.6,
+      color: Colors.black
+  );
+
+  static final TextStyle largeTitle = GoogleFonts.robotoCondensed(
       fontSize: 48,
       fontWeight: FontWeight.w700,
       letterSpacing: 1.6,
@@ -19,7 +26,7 @@ class Fonts {
   );
 
   static final TextStyle subtitle = GoogleFonts.roboto(
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: FontWeight.w700,
     letterSpacing: 1,
   );
@@ -28,6 +35,13 @@ class Fonts {
     fontSize: 18,
     fontWeight: FontWeight.w500,
     letterSpacing: 1,
+  );
+
+  static final TextStyle player = GoogleFonts.roboto(
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    letterSpacing: 1,
+    color: Colors.amber
   );
 
   static final TextStyle parag1 = GoogleFonts.roboto(

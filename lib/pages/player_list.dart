@@ -1,6 +1,7 @@
 import 'package:fcmobile_squad_maker/config/color.dart';
 import 'package:fcmobile_squad_maker/models/club/clubs.dart';
 import 'package:fcmobile_squad_maker/pages/player_info.dart';
+import 'package:fcmobile_squad_maker/pages/player_versus.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:fcmobile_squad_maker/models/player.dart';
@@ -27,10 +28,6 @@ class _PlayerListPageState extends State<PlayerListPage> {
   List<String> mf = ['CAM','LM','CM','RM','CDM'];
   List<String> df = ['LWB','LB','CB','RB','RWB'];
   List<String> gk = ['GK'];
-
-  //선수비교 기능
-  dynamic selectedPlayer1 = 1;
-  dynamic selectedPlayer2 = 2;
 
   @override
   void initState() {
@@ -134,12 +131,30 @@ class _PlayerListPageState extends State<PlayerListPage> {
     return null;
   }
 
-  // String? statStr() {
-  //   if (players.pace > 0) {
-  //     return "페이스";
-  //   }
-  // }
-  
+  //선수비교 기능
+  dynamic selectedPlayers = [];
+
+  bool isVisible = false;
+
+  void _onChanged(dynamic value) {
+    setState(() {
+      if (selectedPlayers.contains(value)) {
+        selectedPlayers.remove(value);
+      } else if (selectedPlayers.length < 2) {
+        selectedPlayers.add(value);
+      }
+    });
+  }
+
+  void _navigateAndDisplayPlayers(BuildContext context) async {
+    await Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => PlayerVersus(players: selectedPlayers, flags: flags, grade: grade, clubs: clubs)));
+    if (mounted) {
+      setState(() {
+        selectedPlayers = [];
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -153,7 +168,12 @@ class _PlayerListPageState extends State<PlayerListPage> {
           ),
           IconButton(
             icon: Icon(IconSrc.versus,size: 24,),
-            onPressed: () {},
+            onPressed: () {
+              setState(() {
+                isVisible = !isVisible;
+                selectedPlayers = [];
+              });
+            },
           )
         ],
       ),
@@ -177,51 +197,71 @@ class _PlayerListPageState extends State<PlayerListPage> {
                   } else if (df.contains(player.position)) {
                     positionColor = Palette.dfColor;
                   } else if (gk.contains(player.position)) {
-                    positionColor = Colors.yellow;
+                    positionColor = Palette.gkColor;
                   } else {
-                    positionColor = Colors.black;
+                    positionColor = Palette.base1;
                   }
 
                   return Card(
-                    child: ListTile(
-                      leading: classUrl != null
-                          ? Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Image.network(
-                                  classUrl,
-                                  width: 60,
-                                  height: 60,
-                                ),
-                                Image.network(
-                                  player.img,
-                                  width: 50,
-                                  height: 50,
-                                )
-                              ],
-                            )
-                          : null,
-                      title: Text(player.name),
-                      subtitle: Row(
-                        children: [
-                          Image.network(flagUrl!,width: 30,height: 30,),
-                          Text(" "+player.nation)
-                        ],
-                      ),
-                      trailing: Container(
-                        child: Text(
-                          player.position+"  "+player.overall.toString(),
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                            color: positionColor,
+                    child: Row(
+                      children: [
+                        Visibility(
+                          visible: isVisible,
+                          child: Radio<Player>(
+                            value: player,
+                            groupValue: selectedPlayers.contains(player) ? player : null,
+                            onChanged: (Player? value) {
+                              if (value != null) _onChanged(value);
+                              print(selectedPlayers);
+                              if (selectedPlayers.length == 2) {
+                                _navigateAndDisplayPlayers(context);
+                              }
+                            },
                           ),
                         ),
-                      ),
-                      onTap: () async {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) => PlayerDetailPage(player: player, flagUrl: flagUrl, classUrl: classUrl, clubUrl: clubUrl)));
-                      },
+                        Expanded(
+                          child: ListTile(
+                            leading: classUrl != null
+                                ? Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Image.network(
+                                        classUrl,
+                                        width: 60,
+                                        height: 60,
+                                      ),
+                                      Image.network(
+                                        player.img,
+                                        width: 50,
+                                        height: 50,
+                                      )
+                                    ],
+                                  )
+                                : null,
+                            title: Text(player.name, overflow: TextOverflow.fade,maxLines: 1,),
+                            subtitle: Row(
+                              children: [
+                                Image.network(flagUrl.toString(),width: 30,height: 30,),
+                                Text(" "+player.nation,overflow: TextOverflow.fade ,maxLines: 1)
+                              ],
+                            ),
+                            trailing: Container(
+                              child: Text(
+                                player.position+"  "+player.overall.toString(),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                  color: positionColor,
+                                ),
+                              ),
+                            ),
+                            onTap: () async {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) => PlayerDetailPage(player: player, flagUrl: flagUrl, classUrl: classUrl, clubUrl: clubUrl)));
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   );
                 }),

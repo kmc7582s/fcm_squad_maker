@@ -4,7 +4,7 @@ class Palette {
   Palette._();
 
   static const Color fwColor = Color(0xFFFF0000);
-  static const Color mfColor = Color(0xFF00ff00);
+  static const Color mfColor = Color(0xFF2DB400);
   static const Color dfColor = Color(0xFF0000FF);
   static const Color gkColor = Color(0xFFFFFF00);
 

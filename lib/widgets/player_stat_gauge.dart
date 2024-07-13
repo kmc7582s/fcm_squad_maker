@@ -29,7 +29,8 @@ class _PlayerStatGaugeState extends State<PlayerStatGauge> {
               style: const TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
-                fontSize: 18
+                fontSize: 18,
+                // debugLabel: "스탯"
               ),
             ),
             duration: Duration(milliseconds: 700),
@@ -42,29 +43,17 @@ class _PlayerStatGaugeState extends State<PlayerStatGauge> {
               degrees: 240,
               style: GaugeAxisStyle(
                 thickness: 12,
-                segmentSpacing: 2,
+                segmentSpacing: 1,
               ),
               progressBar: GaugeProgressBar.rounded(
                 color: Colors.blue,
               ),
-              pointer: GaugePointer.triangle(
-                width: 10,
-                height: 14,
-                borderRadius: 1,
-                color: Color(0xFF193663),
-              ),
               segments: [
                 GaugeSegment(
                   from: 0,
-                  to: stat.toDouble(),
-                  color: Colors.grey,
-                  cornerRadius: Radius.zero,
-                ),
-                GaugeSegment(
-                  from: stat.toDouble(),
                   to: 250,
                   color: Colors.grey,
-                  cornerRadius: Radius.zero,
+                  cornerRadius: Radius.circular(15),
                 ),
               ],
             ),

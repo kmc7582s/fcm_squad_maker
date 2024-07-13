@@ -1,22 +1,40 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SettingPage extends StatefulWidget {
-  const SettingPage({super.key});
+  const SettingPage({super.key, required User user});
 
   @override
   State<SettingPage> createState() => _SettingPageState();
 }
 
 class _SettingPageState extends State<SettingPage> {
+
+  Future<void> _signOut(BuildContext context) async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      Navigator.of(context).pop();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("로그아웃 오류"))
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("설정"),
+        title: Text("내 정보"),
         centerTitle: false,
       ),
       body: Center(
-        child: Text("settings"),
+        child: ElevatedButton(
+          onPressed: () {
+            _signOut(context);
+          },
+          child: Text("로그아웃"),
+        ),
       ),
     );
   }

@@ -1,18 +1,28 @@
 import 'package:fcmobile_squad_maker/pages/player_list.dart';
+import 'package:fcmobile_squad_maker/pages/squad_list.dart';
 import 'package:fcmobile_squad_maker/pages/squad_maker.dart';
 import 'package:fcmobile_squad_maker/pages/home.dart';
 import 'package:fcmobile_squad_maker/pages/setting.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Navigation extends StatefulWidget {
-  const Navigation({super.key});
+  final User user;
+
+  const Navigation({
+    required this.user,
+  Key? key}) : super(key: key);
 
   @override
-  State<Navigation> createState() => _NavigationState();
+  State<Navigation> createState() => _NavigationState(user: user);
 }
 
 class _NavigationState extends State<Navigation> {
   int selectedIndex = 0;
+
+  final User user;
+
+  _NavigationState({required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +30,7 @@ class _NavigationState extends State<Navigation> {
       body: Center(
         child: IndexedStack(
           index: selectedIndex,
-          children: [HomePage(), SquadMakerPage(), PlayerListPage(), SettingPage()],
+          children: [HomePage(), SquadListPage(), PlayerListPage(), SettingPage(user: user)],
         ),
       ),
       bottomNavigationBar: NavigationBar(

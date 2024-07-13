@@ -20,7 +20,7 @@ class _SquadMakerPageState extends State<SquadMakerPage> with SingleTickerProvid
   @override
   void initState () {
     super.initState();
-    _tabController = new TabController(length: 2, vsync: this);
+    _tabController = new TabController(length: 3, vsync: this);
   }
 
   @override
@@ -39,6 +39,7 @@ class _SquadMakerPageState extends State<SquadMakerPage> with SingleTickerProvid
           TabBar(
             controller: _tabController,
             tabs: [
+              Tab(text: "스쿼드 정보"),
               Tab(text: "선수 리스트"),
               Tab(text: "스쿼드",)
             ],
@@ -47,7 +48,23 @@ class _SquadMakerPageState extends State<SquadMakerPage> with SingleTickerProvid
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  Text("선수 리스트"),
+                  Column(
+                    children: [
+                      TextField(),
+                    ],
+                  ),
+                  ListView.builder(
+                    itemCount: 11,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text("POSITION"),
+                        onTap: () {
+                          //선수 정보 데이터를 불러와야됨 (검색 기능이 포함된)
+
+                        },
+                      );
+                    },
+                  ),
                   LayoutBuilder(
                     builder: (context, constraints) {
                       return Stack(
