@@ -18,4 +18,24 @@ class Palette {
   static const Color main1 = Color(0xFF1A6DFF);
 
   static const Color error = Color(0xFFD80000);
+
+}
+
+List<String> fw = ['ST','LW','RW','LF','RF','CF'];
+List<String> mf = ['CAM','LM','CM','RM','CDM'];
+List<String> df = ['LWB','LB','CB','RB','RWB'];
+List<String> gk = ['GK'];
+
+Color positionColor(String position) {
+  if (fw.contains(position)) {
+    return Palette.fwColor;
+  } else if (mf.contains(position)){
+    return Palette.mfColor;
+  } else if (df.contains(position)) {
+    return Palette.dfColor;
+  } else if (gk.contains(position)) {
+    return Palette.gkColor;
+  } else {
+    return Palette.base1;
+  }
 }

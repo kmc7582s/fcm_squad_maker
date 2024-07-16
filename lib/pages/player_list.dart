@@ -24,10 +24,6 @@ class _PlayerListPageState extends State<PlayerListPage> {
   List<Clubs> clubs = [];
   List<Flags> flags = [];
   List<String> stat = ['페이스','슈팅','패스','민첩성','수비','피지컬'];
-  List<String> fw = ['ST','LW','RW','LF','RF','CF'];
-  List<String> mf = ['CAM','LM','CM','RM','CDM'];
-  List<String> df = ['LWB','LB','CB','RB','RWB'];
-  List<String> gk = ['GK'];
 
   @override
   void initState() {
@@ -146,11 +142,24 @@ class _PlayerListPageState extends State<PlayerListPage> {
     });
   }
 
+  //선수검색 기능
+  String searchText = "";
+  bool _isSearchBarVisible = false;
+
+  void searchEvent(BuildContext context, int index) {
+    String content = players[index].name;
+    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context)=>ContentPage(content : content))
+    );
+  }
+
   void _navigateAndDisplayPlayers(BuildContext context) async {
     await Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => PlayerVersus(players: selectedPlayers, flags: flags, grade: grade, clubs: clubs)));
     if (mounted) {
       setState(() {
         selectedPlayers = [];
+        isVisible = false;
       });
     }
   }
@@ -164,7 +173,12 @@ class _PlayerListPageState extends State<PlayerListPage> {
         actions: [
           IconButton(
             icon:Icon(IconSrc.search),
-            onPressed: () {},
+            onPressed: () {
+              setState(() {
+                _isSearchBarVisible = !_isSearchBarVisible;
+                searchText = "";
+              });
+            },
           ),
           IconButton(
             icon: Icon(IconSrc.versus,size: 24,),
@@ -179,6 +193,20 @@ class _PlayerListPageState extends State<PlayerListPage> {
       ),
       body: Column(
         children: [
+          Visibility(
+            visible: _isSearchBarVisible,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SearchBar(
+                hintText: '선수명을 입력해주세요.',
+                onChanged: (value) {
+                  setState(() {
+                    searchText = value;
+                  });
+                },
+              ),
+            ),
+          ),
           Divider(),
           Expanded(
             child: ListView.builder(
@@ -188,85 +216,93 @@ class _PlayerListPageState extends State<PlayerListPage> {
                   dynamic flagUrl = getFlagUrl(player.nation);
                   dynamic classUrl = getClassUrl(player.grade);
                   dynamic clubUrl = getClubUrl(player.club);
-
-                  Color positionColor;
-                  if (fw.contains(player.position)) {
-                    positionColor = Palette.fwColor;
-                  } else if (mf.contains(player.position)){
-                    positionColor = Palette.mfColor;
-                  } else if (df.contains(player.position)) {
-                    positionColor = Palette.dfColor;
-                  } else if (gk.contains(player.position)) {
-                    positionColor = Palette.gkColor;
+                  
+                  if(searchText.isNotEmpty && !players[index].name.toLowerCase().contains(searchText.toLowerCase())) {
+                    return SizedBox.shrink();
                   } else {
-                    positionColor = Palette.base1;
-                  }
-
-                  return Card(
-                    child: Row(
-                      children: [
-                        Visibility(
-                          visible: isVisible,
-                          child: Radio<Player>(
-                            value: player,
-                            groupValue: selectedPlayers.contains(player) ? player : null,
-                            onChanged: (Player? value) {
-                              if (value != null) _onChanged(value);
-                              print(selectedPlayers);
-                              if (selectedPlayers.length == 2) {
-                                _navigateAndDisplayPlayers(context);
-                              }
-                            },
-                          ),
-                        ),
-                        Expanded(
-                          child: ListTile(
-                            leading: classUrl != null
-                                ? Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      Image.network(
-                                        classUrl,
-                                        width: 60,
-                                        height: 60,
-                                      ),
-                                      Image.network(
-                                        player.img,
-                                        width: 50,
-                                        height: 50,
-                                      )
-                                    ],
-                                  )
-                                : null,
-                            title: Text(player.name, overflow: TextOverflow.fade,maxLines: 1,),
-                            subtitle: Row(
-                              children: [
-                                Image.network(flagUrl.toString(),width: 30,height: 30,),
-                                Text(" "+player.nation,overflow: TextOverflow.fade ,maxLines: 1)
-                              ],
+                    return Card(
+                      child: Row(
+                        children: [
+                          Visibility(
+                            visible: isVisible,
+                            child: Radio<Player>(
+                              value: player,
+                              groupValue: selectedPlayers.contains(player) ? player : null,
+                              onChanged: (Player? value) {
+                                if (value != null) _onChanged(value);
+                                print(selectedPlayers);
+                                if (selectedPlayers.length == 2) {
+                                  _navigateAndDisplayPlayers(context);
+                                }
+                              },
                             ),
-                            trailing: Container(
-                              child: Text(
-                                player.position+"  "+player.overall.toString(),
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                  color: positionColor,
+                          ),
+                          Expanded(
+                            child: ListTile(
+                              leading: classUrl != null
+                                  ? Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Image.network(
+                                    classUrl,
+                                    width: 60,
+                                    height: 60,
+                                  ),
+                                  Image.network(
+                                    player.img,
+                                    width: 50,
+                                    height: 50,
+                                  )
+                                ],
+                              )
+                                  : null,
+                              title: Text(player.name, overflow: TextOverflow.fade,maxLines: 1,),
+                              subtitle: Row(
+                                children: [
+                                  Image.network(flagUrl.toString(),width: 30,height: 30,),
+                                  Text(" "+player.nation,overflow: TextOverflow.fade ,maxLines: 1)
+                                ],
+                              ),
+                              trailing: Container(
+                                child: Text(
+                                  player.position+"  "+player.overall.toString(),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: positionColor(player.position.toString()),
+                                  ),
                                 ),
                               ),
+                              onTap: () async {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext context) => PlayerDetailPage(player: player, flagUrl: flagUrl, classUrl: classUrl, clubUrl: clubUrl)));
+                              },
                             ),
-                            onTap: () async {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (BuildContext context) => PlayerDetailPage(player: player, flagUrl: flagUrl, classUrl: classUrl, clubUrl: clubUrl)));
-                            },
                           ),
-                        ),
-                      ],
-                    ),
-                  );
+                        ],
+                      ),
+                    );
+                  }
+
                 }),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// 선택한 항목의 내용을 보여주는 추가 페이지
+class ContentPage extends StatelessWidget {
+  final String content;
+
+  const ContentPage({Key? key, required this.content}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Text(content),
       ),
     );
   }

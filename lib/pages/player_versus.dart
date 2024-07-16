@@ -4,6 +4,7 @@ import 'package:fcmobile_squad_maker/models/club/clubs.dart';
 import 'package:fcmobile_squad_maker/models/flag/flags.dart';
 import 'package:fcmobile_squad_maker/widgets/player_profile.dart';
 import 'package:flutter/material.dart';
+import 'package:marquee/marquee.dart';
 
 class PlayerVersus extends StatelessWidget {
   final dynamic players;
@@ -64,25 +65,28 @@ class PlayerVersus extends StatelessWidget {
           ),
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
+            SizedBox(height: 20,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 PlayerProfile(n: 0, players: players, flags: flags, grade: grade, clubs: clubs),
-                Container(
-                  height: 300,
-                    child: Row(
-                      children: [
-                        VerticalDivider(thickness: 1,color: Colors.black),
-                      ],
-                    )
+                Center(
+                  child: Container(
+                    height: 300,
+                      child: Row(
+                        children: [
+                          VerticalDivider(thickness: 1,color: Colors.black),
+                        ],
+                      )
+                  ),
                 ),
                 PlayerProfile(n: 1, players: players, flags: flags, grade: grade, clubs: clubs),
               ],
             ),
+            SizedBox(height: 20,),
             Container(
-              width: MediaQuery.of(context).size.width-40,
+              width: MediaQuery.of(context).size.width-35,
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
@@ -91,53 +95,17 @@ class PlayerVersus extends StatelessWidget {
                 child: DataTable(
                   columnSpacing: 28.0,
                   columns: [
-                    DataColumn(label: Text(players[0].name)),
-                    DataColumn(label: Text("선수명")),
-                    DataColumn(label: Text(players[1].name)),
+                    DataColumn(label: Center(child: Container(width: 100,child:animated_text(players[0].name)))),
+                    DataColumn(label: Center(child: Text("선수명"))),
+                    DataColumn(label: Center(child: Container(width: 100,child:animated_text(players[1].name)))),
                   ],
                   rows: [
-                    DataRow(
-                      cells: [
-                        DataCell(Text(players[0].pace.toString())),
-                        DataCell(Text("페이스")),
-                        DataCell(Text(players[1].pace.toString())),
-                      ],
-                    ),
-                    DataRow(
-                      cells: [
-                        DataCell(Text(players[0].shooting.toString())),
-                        DataCell(Text("슈팅")),
-                        DataCell(Text(players[1].shooting.toString())),
-                      ],
-                    ),
-                    DataRow(
-                      cells: [
-                        DataCell(Text(players[0].passing.toString())),
-                        DataCell(Text("패스")),
-                        DataCell(Text(players[1].passing.toString())),
-                      ],
-                    ),
-                    DataRow(
-                      cells: [
-                        DataCell(Text(players[0].agility.toString())),
-                        DataCell(Text("민첩성")),
-                        DataCell(Text(players[1].agility.toString())),
-                      ],
-                    ),
-                    DataRow(
-                      cells: [
-                        DataCell(Text(players[0].defending.toString())),
-                        DataCell(Text("수비")),
-                        DataCell(Text(players[1].defending.toString())),
-                      ],
-                    ),
-                    DataRow(
-                      cells: [
-                        DataCell(Text(players[0].physical.toString())),
-                        DataCell(Text("피지컬")),
-                        DataCell(Text(players[1].physical.toString())),
-                      ],
-                    ),
+                    dataRow(players[0].pace, "페이스", players[1].pace),
+                    dataRow(players[0].shooting, "슈팅", players[1].shooting),
+                    dataRow(players[0].passing, "패스", players[1].passing),
+                    dataRow(players[0].agility, "민첩성", players[1].agility),
+                    dataRow(players[0].defending, "수비", players[1].defending),
+                    dataRow(players[0].physical, "피지컬", players[1].physical),
                   ],
                 ),
               ),
@@ -147,4 +115,50 @@ class PlayerVersus extends StatelessWidget {
       )
     );
   }
+
+  Widget animated_text(String text) {
+    return Marquee(
+      text: text,
+      velocity: 50.0,
+      blankSpace: 50,
+      startPadding: 4.0,
+      pauseAfterRound: Duration(milliseconds: 2000),
+      accelerationDuration: Duration(seconds: 1),
+      accelerationCurve: Curves.linear,
+      decelerationDuration: Duration(milliseconds: 500),
+      decelerationCurve: Curves.easeOut,
+    );
+  }
+
+  DataRow dataRow(int stat1, String stat_name, int stat2) {
+    return DataRow(
+      cells: [
+        DataCell(
+            (stat1 > stat2) ? Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text("+${(stat1-stat2).toString()}",style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),),
+                Text(stat1.toString()),
+              ],
+            ) : Center(child: Text(stat1.toString())),
+        ),
+        DataCell(Center(child: Text(stat_name))),
+        DataCell(
+          (stat2 > stat1) ? Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(stat2.toString()),
+              Text("+${(stat2-stat1).toString()}",style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
+            ],
+          ) : Center(child: Text(stat2.toString())),
+        ),
+      ],
+    );
+  }
+
+  // Widget polarCoordinate() {
+  //   return PolarCoord(
+  //
+  //   );
+  // }
 }

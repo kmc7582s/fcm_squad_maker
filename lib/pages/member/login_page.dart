@@ -1,7 +1,6 @@
 import 'package:fcmobile_squad_maker/Navigation.dart';
 import 'package:fcmobile_squad_maker/config/color.dart';
 import 'package:fcmobile_squad_maker/config/fonts.dart';
-import 'package:fcmobile_squad_maker/main.dart';
 import 'package:fcmobile_squad_maker/pages/member/edit_account.dart';
 import 'package:fcmobile_squad_maker/pages/member/signup_page.dart';
 import 'package:flutter/material.dart';
@@ -17,10 +16,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _pwController = TextEditingController();
-
-  final _auth = FirebaseAuth.instance;
-
   String _statusMessage = '';
+  final _auth = FirebaseAuth.instance;
 
   Future<void> _signIn() async {
     try {
@@ -31,13 +28,15 @@ class _LoginPageState extends State<LoginPage> {
       if (userCredential.user != null) {
         setState(() {
           _statusMessage = '로그인 성공';
-          Navigator.of(context).push(MaterialPageRoute(
+          print(_statusMessage);
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (context) => Navigation(user: userCredential.user!)));
         });
       }
     } on FirebaseAuthException catch (e) {
       setState(() {
         _statusMessage = e.message ?? '로그인 실패';
+        print(_statusMessage);
       });
     }
   }
@@ -104,19 +103,19 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       textField("이메일", _emailController, false),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       textField("비밀번호", _pwController, true),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 4),
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -126,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                                 style: Fonts.label,
                               ),
                               onPressed: () => Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (context) => SignupPage())),
+                                  MaterialPageRoute(builder: (context) => const SignupPage())),
                             ),
                             TextButton(
                               child: Text(
@@ -134,13 +133,14 @@ class _LoginPageState extends State<LoginPage> {
                                 style: Fonts.label,
                               ),
                               onPressed: () => Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (context) => EditAccountPage())),
+                                  MaterialPageRoute(builder: (context) => const EditAccountPage())),
                             ),
                           ],
                         ),
                       ),
                       ElevatedButton(
-                          onPressed: () => _signIn(), child: Text("로그인")),
+                          onPressed: () => _signIn(), child: const Text("로그인")),
+                      Text(_statusMessage, style: TextStyle(color: Colors.red),)
                     ],
                   ),
                 ),
@@ -158,10 +158,10 @@ class _LoginPageState extends State<LoginPage> {
       obscureText: isId,
       decoration: InputDecoration(
           hintText: hint,
-          hintStyle: TextStyle(color: Palette.base3),
+          hintStyle: const TextStyle(color: Palette.base3),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Palette.base1),
+            borderSide: const BorderSide(color: Palette.base1),
           ),
           label: Text(hint)),
     );

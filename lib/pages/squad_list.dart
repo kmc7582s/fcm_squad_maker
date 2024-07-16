@@ -29,6 +29,8 @@ class _SquadListPageState extends State<SquadListPage> {
         itemBuilder: (context, index) {
           return ListTile(
             title: Text(my_squad_title),
+            subtitle: Text("포메이션"),
+            trailing: Text("평균 OVR"),
             onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => SquadMakerPage()))
           );
         },

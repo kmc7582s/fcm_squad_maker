@@ -1,3 +1,4 @@
+import 'package:fcmobile_squad_maker/config/color.dart';
 import 'package:fcmobile_squad_maker/config/fonts.dart';
 import 'package:flutter/material.dart';
 
@@ -19,9 +20,9 @@ class PlayerProfile extends StatelessWidget {
     return null; // 국기를 찾지 못한 경우
   }
 
-  String? getClassUrl(String p_class) {
+  String? getClassUrl(String pClass) {
     for (var grade in grade) {
-      if (grade.grade == p_class) {
+      if (grade.grade == pClass) {
         return grade.img;
       }
     }
@@ -36,7 +37,6 @@ class PlayerProfile extends StatelessWidget {
     }
     return null;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -61,15 +61,15 @@ class PlayerProfile extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Text(players[n].grade,style: TextStyle(fontSize: 11,fontWeight: FontWeight.bold),),
+               Text(players[n].grade,style: const TextStyle(fontSize: 11,fontWeight: FontWeight.bold),),
               Text(
                 players[n].name,
                 style: Fonts.player,
               ),
               Row(
                 children: [
-                  Text(players[n].position.toString()+" "+players[n].overall.toString(), style: Fonts.subtitle2,),
-                  SizedBox(width: 10,),
+                  Text("${players[n].position} ${players[n].overall}", style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600,color: positionColor(players[n].position.toString()))),
+                  const SizedBox(width: 20,),
                   Stack(
                     children: [
                       Container(
@@ -93,12 +93,12 @@ class PlayerProfile extends StatelessWidget {
                               borderRadius: BorderRadius.circular(15),
                               color: Colors.blue
                           ),
-                          child: Text("L",style: TextStyle(fontSize: 7),),
+                          child: const Text("L",style: TextStyle(fontSize: 7),),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(width: 5),
+                  const SizedBox(width: 5),
                   Stack(
                     children: [
                       Container(
@@ -122,7 +122,7 @@ class PlayerProfile extends StatelessWidget {
                               borderRadius: BorderRadius.circular(15),
                               color: Colors.blue
                           ),
-                          child: Text("R",style: TextStyle(fontSize: 7),),
+                          child: const Text("R",style: TextStyle(fontSize: 7),),
                         ),
                       ),
                     ],
@@ -135,13 +135,13 @@ class PlayerProfile extends StatelessWidget {
         Row(
           children: [
             Image.network(getFlagUrl(players[n].nation).toString(),width: 30,height: 30),
-            Text(" "+players[n].nation.toString())
+            Text(" ${players[n].nation}")
           ],
         ),
         Row(
           children: [
             Image.network(getClubUrl(players[n].club).toString(),width: 30,height: 30),
-            Text(" "+players[n].club.toString())
+            Text(" ${players[n].club}")
           ],
         ),
       ],

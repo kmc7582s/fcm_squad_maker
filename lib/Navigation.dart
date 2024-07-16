@@ -1,6 +1,5 @@
 import 'package:fcmobile_squad_maker/pages/player_list.dart';
 import 'package:fcmobile_squad_maker/pages/squad_list.dart';
-import 'package:fcmobile_squad_maker/pages/squad_maker.dart';
 import 'package:fcmobile_squad_maker/pages/home.dart';
 import 'package:fcmobile_squad_maker/pages/setting.dart';
 import 'package:firebase_auth/firebase_auth.dart';

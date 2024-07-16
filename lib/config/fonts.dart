@@ -64,7 +64,7 @@ class Fonts {
 
   static final TextStyle parag4 = GoogleFonts.roboto(
     fontSize: 14,
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w500,
     letterSpacing: 1,
   );
 
@@ -73,4 +73,5 @@ class Fonts {
     fontWeight: FontWeight.w400,
     letterSpacing: 1,
   );
+
 }

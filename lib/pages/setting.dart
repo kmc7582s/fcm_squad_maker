@@ -1,3 +1,4 @@
+import 'package:fcmobile_squad_maker/pages/member/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,7 @@ class _SettingPageState extends State<SettingPage> {
   Future<void> _signOut(BuildContext context) async {
     try {
       await FirebaseAuth.instance.signOut();
-      Navigator.of(context).pop();
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("로그아웃 오류"))

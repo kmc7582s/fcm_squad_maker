@@ -15,7 +15,14 @@ class _SquadMakerPageState extends State<SquadMakerPage> with SingleTickerProvid
   final List<String> formation_5back = ['5-2-1-2','5-2-2-1','5-3-2','5-4-1'];
   final List<String> formation_4back = ['4-1-4-1','4-2-4','4-2-2-2','4-3-3','4-3-1-2','4-3-2-1','4-4-2','4-5-1'];
   final List<String> formation_3back = ['3-4-1-2','3-4-2-1','3-5-2','3-5-1-1'];
+  final List<List<String>> formation = [['3-4-1-2','3-4-2-1','3-5-2','3-5-1-1'], ['4-1-4-1','4-2-4','4-2-2-2','4-3-3','4-3-1-2','4-3-2-1','4-4-2','4-5-1'], ['5-2-1-2','5-2-2-1','5-3-2','5-4-1']];
   TabController? _tabController;
+  final _titleController = TextEditingController();
+
+  void fm() {
+    setState(() {
+    });
+  }
 
   @override
   void initState () {
@@ -30,7 +37,13 @@ class _SquadMakerPageState extends State<SquadMakerPage> with SingleTickerProvid
         title: Text("스쿼드 메이커"),
         centerTitle: false,
         actions: [
-          IconButton(icon:Icon(Icons.save),onPressed: () {}),
+          IconButton(
+              icon:Icon(Icons.save),
+              onPressed: () {
+
+                Navigator.pop(context);
+              }
+          ),
           IconButton(icon:Icon(Icons.menu),onPressed: () {}),
         ],
       ),
@@ -50,7 +63,23 @@ class _SquadMakerPageState extends State<SquadMakerPage> with SingleTickerProvid
                 children: [
                   Column(
                     children: [
-                      TextField(),
+                      Text("스쿼드 시뮬레이션 제목"),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: TextField(
+                          controller: _titleController,
+                          decoration: InputDecoration(
+                            hintText: "스쿼드 제목을 입력해주세요"
+                          ),
+                        ),
+                      ),
+
+                      Text("팀"),
+                      Text("포메이션"),
+                      // DropdownButtonFormField(
+                      //   items: items,
+                      //   onChanged: () {},
+                      // ),
                     ],
                   ),
                   ListView.builder(
@@ -140,15 +169,73 @@ class _SquadMakerPageState extends State<SquadMakerPage> with SingleTickerProvid
                           Positioned(
                               top : constraints.maxHeight * 3/5,
                               child: Container(
+                                color: Colors.black,
                                 height: constraints.maxHeight * 1/5,
-                                width: constraints.maxWidth,
+                                width: constraints.maxWidth * 1/4,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    DF(),
-                                    DF(),
-                                    DF(),
-                                    DF(),
+                                    // DF(),
+                                    // DF(),
+                                    // DF(),
+                                    // DF(),
+                                    // DF(),
+                                  ],
+                                ),
+                              )
+                          ),
+                          Positioned(
+                              left: constraints.maxWidth * 1/4,
+                              top : constraints.maxHeight * 3/5,
+                              child: Container(
+                                color: Colors.blue,
+                                height: constraints.maxHeight * 1/5,
+                                width: constraints.maxWidth * 1/4,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    // DF(),
+                                    // DF(),
+                                    // DF(),
+                                    // DF(),
+                                    // DF(),
+                                  ],
+                                ),
+                              )
+                          ),
+                          Positioned(
+                              right: constraints.maxWidth * 1/4,
+                              top : constraints.maxHeight * 3/5,
+                              child: Container(
+                                color: Colors.black,
+                                height: constraints.maxHeight * 1/5,
+                                width: constraints.maxWidth * 1/4,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    // DF(),
+                                    // DF(),
+                                    // DF(),
+                                    // DF(),
+                                    // DF(),
+                                  ],
+                                ),
+                              )
+                          ),
+                          Positioned(
+                              top : constraints.maxHeight * 3/5,
+                              child: Container(
+                                color: Colors.black,
+                                height: constraints.maxHeight * 1/5,
+                                width: constraints.maxWidth * 1/4,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    // DF(),
+                                    // DF(),
+                                    // DF(),
+                                    // DF(),
+                                    // DF(),
                                   ],
                                 ),
                               )

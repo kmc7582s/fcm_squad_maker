@@ -21,6 +21,9 @@ version: 1.0.0+1
 environment:
   sdk: '>=3.4.0 <4.0.0'
 
+dependency_overrides:
+  fading_edge_scrollview: ^4.1.1
+
 dependencies:
   flutter:
     sdk: flutter
@@ -38,6 +41,9 @@ dependencies:
   gauge_indicator: ^0.4.3
   google_fonts:
   font_awesome_flutter:
+  image_picker:
+  graphic:
+  marquee:
 
 
 dev_dependencies:
