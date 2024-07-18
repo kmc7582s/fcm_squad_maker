@@ -1,5 +1,4 @@
 import 'package:fcmobile_squad_maker/pages/member/login_page.dart';
-import 'package:fcmobile_squad_maker/pages/member/signup_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fcmobile_squad_maker/firebase/firebase_options.dart';

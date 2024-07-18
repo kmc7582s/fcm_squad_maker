@@ -1,7 +1,3 @@
-import 'package:fcmobile_squad_maker/config/fonts.dart';
-import 'package:fcmobile_squad_maker/models/class/class.dart';
-import 'package:fcmobile_squad_maker/models/club/clubs.dart';
-import 'package:fcmobile_squad_maker/models/flag/flags.dart';
 import 'package:fcmobile_squad_maker/widgets/player_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';

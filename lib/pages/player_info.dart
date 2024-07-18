@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:fcmobile_squad_maker/config/assets.dart';
 import 'package:fcmobile_squad_maker/config/color.dart';
 import 'package:fcmobile_squad_maker/config/fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
