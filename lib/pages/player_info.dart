@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:fcmobile_squad_maker/config/assets.dart';
 import 'package:fcmobile_squad_maker/config/color.dart';
 import 'package:fcmobile_squad_maker/config/fonts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:gauge_indicator/gauge_indicator.dart';
 
@@ -9,18 +13,19 @@ class PlayerDetailPage extends StatefulWidget {
   final dynamic flagUrl;
   final dynamic classUrl;
   final dynamic clubUrl;
+  final User user;
 
   const PlayerDetailPage(
       {required this.player,
       required this.flagUrl,
       required this.classUrl,
       required this.clubUrl,
-      Key? key})
+      Key? key, required this.user})
       : super(key: key);
 
   @override
   State<PlayerDetailPage> createState() => _PlayerDetailPageState(
-      player: player, flagUrl: flagUrl, classUrl: classUrl, clubUrl: clubUrl);
+      player: player, flagUrl: flagUrl, classUrl: classUrl, clubUrl: clubUrl, user: user);
 }
 
 class _PlayerDetailPageState extends State<PlayerDetailPage> {
@@ -28,31 +33,93 @@ class _PlayerDetailPageState extends State<PlayerDetailPage> {
   final dynamic flagUrl;
   final dynamic classUrl;
   final dynamic clubUrl;
+  final User user;
+
+  _PlayerDetailPageState(
+      {required this.player,
+        required this.flagUrl,
+        required this.classUrl,
+        required this.clubUrl,
+        required this.user,
+      });
+
+
   List<int> enforce = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   List<int> evolution = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   List<String> stat_title = ['페이스', '슈팅', '패스', '민첩성', '수비', '피지컬'];
-  List<List<int>> test = [
-    [0, 0],
-    [1, 3],
-    [2, 6],
-    [3, 10],
-    [4, 14],
-    [5, 18],
-    [6, 24],
-    [7, 31],
-    [8, 39],
-    [9, 48],
-    [10, 60]
-  ];
+  List<List<int>> test = [[0, 0], [1, 3], [2, 6], [3, 10], [4, 14], [5, 18], [6, 24], [7, 31], [8, 39], [9, 48], [10, 60]];
   int _enforce = 0;
   int _evolution = 0;
   int _increase = 0;
 
-  _PlayerDetailPageState(
-      {required this.player,
-      required this.flagUrl,
-      required this.classUrl,
-      required this.clubUrl});
+  //좋아요 기능
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  DatabaseReference likeRef = FirebaseDatabase.instance.ref('player');
+  StreamSubscription<DatabaseEvent>? _userSubscription;
+  StreamSubscription<DatabaseEvent>? _totalSubscription;
+  int _likeCount = 0;
+  bool _isLiked = false;
+  String _uid = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _initUser();
+  }
+
+  Future<void> _initUser() async {
+    User? user = _auth.currentUser;
+
+    setState(() {
+      _uid = user!.uid;
+    });
+
+    for (int i=0; i<=53; i++) {
+      if (player.id == i) {
+        _userSubscription = likeRef.child('$i').child('likes').child('users').child(_uid).onValue.listen((event) {
+          final dynamic data = event.snapshot.value;
+          if (mounted) {
+            setState(() {
+              _isLiked = data != null ? data['isLiked'] : false;
+            });
+          }
+        });
+
+        _totalSubscription = likeRef.child('$i').child('likes').child('total').onValue.listen((event) {
+          final dynamic data = event.snapshot.value;
+          if (mounted) {
+            setState(() {
+              _likeCount = data ?? 0;
+            });
+          }
+        });
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _userSubscription?.cancel();
+    _totalSubscription?.cancel();
+    super.dispose();
+  }
+
+  void _toggleLike() {
+    setState(() {
+      _isLiked = !_isLiked;
+
+      for (int i=0; i<=53; i++) {
+        if (player.id == i) {
+          likeRef.child('$i').child('likes').child('users').child(_uid).set({
+            'isLiked' : _isLiked,
+          });
+        }
+        if (player.id == i) {
+          likeRef.child('$i').child('likes').child('total').set(ServerValue.increment(_isLiked ? 1 : -1));
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,13 +133,11 @@ class _PlayerDetailPageState extends State<PlayerDetailPage> {
         ),
         actions: [
           IconButton(
-              onPressed: () {},
-              icon: Row(
-                children: [
-                  Icon(Icons.star_border_rounded),
-                  Text("개수"),
-                ],
-              )),
+            onPressed: _toggleLike,
+            icon: Icon(_isLiked ? Icons.favorite : Icons.favorite_border, color: _isLiked ? Colors.red : null,),
+          ),
+          Text("$_likeCount"),
+          SizedBox(width: 20,)
         ],
       ),
       body: Column(

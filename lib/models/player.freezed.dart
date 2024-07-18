@@ -20,6 +20,7 @@ Player _$PlayerFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Player {
+  int get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get nation => throw _privateConstructorUsedError;
   String get club => throw _privateConstructorUsedError;
@@ -34,8 +35,8 @@ mixin _$Player {
   int get physical => throw _privateConstructorUsedError;
   int get l_foot => throw _privateConstructorUsedError;
   int get r_foot => throw _privateConstructorUsedError;
+  dynamic get likes => throw _privateConstructorUsedError;
   String get img => throw _privateConstructorUsedError;
-  String get price => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -48,7 +49,8 @@ abstract class $PlayerCopyWith<$Res> {
       _$PlayerCopyWithImpl<$Res, Player>;
   @useResult
   $Res call(
-      {String name,
+      {int id,
+      String name,
       String nation,
       String club,
       String position,
@@ -62,8 +64,8 @@ abstract class $PlayerCopyWith<$Res> {
       int physical,
       int l_foot,
       int r_foot,
-      String img,
-      String price});
+      dynamic likes,
+      String img});
 }
 
 /// @nodoc
@@ -79,6 +81,7 @@ class _$PlayerCopyWithImpl<$Res, $Val extends Player>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? name = null,
     Object? nation = null,
     Object? club = null,
@@ -93,10 +96,14 @@ class _$PlayerCopyWithImpl<$Res, $Val extends Player>
     Object? physical = null,
     Object? l_foot = null,
     Object? r_foot = null,
+    Object? likes = freezed,
     Object? img = null,
-    Object? price = null,
   }) {
     return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -153,13 +160,13 @@ class _$PlayerCopyWithImpl<$Res, $Val extends Player>
           ? _value.r_foot
           : r_foot // ignore: cast_nullable_to_non_nullable
               as int,
+      likes: freezed == likes
+          ? _value.likes
+          : likes // ignore: cast_nullable_to_non_nullable
+              as dynamic,
       img: null == img
           ? _value.img
           : img // ignore: cast_nullable_to_non_nullable
-              as String,
-      price: null == price
-          ? _value.price
-          : price // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -173,7 +180,8 @@ abstract class _$$PlayerImplCopyWith<$Res> implements $PlayerCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String name,
+      {int id,
+      String name,
       String nation,
       String club,
       String position,
@@ -187,8 +195,8 @@ abstract class _$$PlayerImplCopyWith<$Res> implements $PlayerCopyWith<$Res> {
       int physical,
       int l_foot,
       int r_foot,
-      String img,
-      String price});
+      dynamic likes,
+      String img});
 }
 
 /// @nodoc
@@ -202,6 +210,7 @@ class __$$PlayerImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? name = null,
     Object? nation = null,
     Object? club = null,
@@ -216,10 +225,14 @@ class __$$PlayerImplCopyWithImpl<$Res>
     Object? physical = null,
     Object? l_foot = null,
     Object? r_foot = null,
+    Object? likes = freezed,
     Object? img = null,
-    Object? price = null,
   }) {
     return _then(_$PlayerImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -276,13 +289,13 @@ class __$$PlayerImplCopyWithImpl<$Res>
           ? _value.r_foot
           : r_foot // ignore: cast_nullable_to_non_nullable
               as int,
+      likes: freezed == likes
+          ? _value.likes
+          : likes // ignore: cast_nullable_to_non_nullable
+              as dynamic,
       img: null == img
           ? _value.img
           : img // ignore: cast_nullable_to_non_nullable
-              as String,
-      price: null == price
-          ? _value.price
-          : price // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -292,7 +305,8 @@ class __$$PlayerImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$PlayerImpl implements _Player {
   _$PlayerImpl(
-      {required this.name,
+      {required this.id,
+      required this.name,
       required this.nation,
       required this.club,
       required this.position,
@@ -306,12 +320,14 @@ class _$PlayerImpl implements _Player {
       required this.physical,
       required this.l_foot,
       required this.r_foot,
-      this.img = '',
-      this.price = ''});
+      required this.likes,
+      this.img = ''});
 
   factory _$PlayerImpl.fromJson(Map<String, dynamic> json) =>
       _$$PlayerImplFromJson(json);
 
+  @override
+  final int id;
   @override
   final String name;
   @override
@@ -341,15 +357,14 @@ class _$PlayerImpl implements _Player {
   @override
   final int r_foot;
   @override
-  @JsonKey()
-  final String img;
+  final dynamic likes;
   @override
   @JsonKey()
-  final String price;
+  final String img;
 
   @override
   String toString() {
-    return 'Player(name: $name, nation: $nation, club: $club, position: $position, grade: $grade, overall: $overall, pace: $pace, shooting: $shooting, passing: $passing, agility: $agility, defending: $defending, physical: $physical, l_foot: $l_foot, r_foot: $r_foot, img: $img, price: $price)';
+    return 'Player(id: $id, name: $name, nation: $nation, club: $club, position: $position, grade: $grade, overall: $overall, pace: $pace, shooting: $shooting, passing: $passing, agility: $agility, defending: $defending, physical: $physical, l_foot: $l_foot, r_foot: $r_foot, likes: $likes, img: $img)';
   }
 
   @override
@@ -357,6 +372,7 @@ class _$PlayerImpl implements _Player {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PlayerImpl &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.nation, nation) || other.nation == nation) &&
             (identical(other.club, club) || other.club == club) &&
@@ -375,14 +391,15 @@ class _$PlayerImpl implements _Player {
                 other.physical == physical) &&
             (identical(other.l_foot, l_foot) || other.l_foot == l_foot) &&
             (identical(other.r_foot, r_foot) || other.r_foot == r_foot) &&
-            (identical(other.img, img) || other.img == img) &&
-            (identical(other.price, price) || other.price == price));
+            const DeepCollectionEquality().equals(other.likes, likes) &&
+            (identical(other.img, img) || other.img == img));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      id,
       name,
       nation,
       club,
@@ -397,8 +414,8 @@ class _$PlayerImpl implements _Player {
       physical,
       l_foot,
       r_foot,
-      img,
-      price);
+      const DeepCollectionEquality().hash(likes),
+      img);
 
   @JsonKey(ignore: true)
   @override
@@ -416,7 +433,8 @@ class _$PlayerImpl implements _Player {
 
 abstract class _Player implements Player {
   factory _Player(
-      {required final String name,
+      {required final int id,
+      required final String name,
       required final String nation,
       required final String club,
       required final String position,
@@ -430,11 +448,13 @@ abstract class _Player implements Player {
       required final int physical,
       required final int l_foot,
       required final int r_foot,
-      final String img,
-      final String price}) = _$PlayerImpl;
+      required final dynamic likes,
+      final String img}) = _$PlayerImpl;
 
   factory _Player.fromJson(Map<String, dynamic> json) = _$PlayerImpl.fromJson;
 
+  @override
+  int get id;
   @override
   String get name;
   @override
@@ -464,9 +484,9 @@ abstract class _Player implements Player {
   @override
   int get r_foot;
   @override
-  String get img;
+  dynamic get likes;
   @override
-  String get price;
+  String get img;
   @override
   @JsonKey(ignore: true)
   _$$PlayerImplCopyWith<_$PlayerImpl> get copyWith =>

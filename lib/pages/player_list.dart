@@ -2,6 +2,7 @@ import 'package:fcmobile_squad_maker/config/color.dart';
 import 'package:fcmobile_squad_maker/models/club/clubs.dart';
 import 'package:fcmobile_squad_maker/pages/player_info.dart';
 import 'package:fcmobile_squad_maker/pages/player_versus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:fcmobile_squad_maker/models/player.dart';
@@ -11,13 +12,17 @@ import '../models/flag/flags.dart';
 import '../models/league/leagues.dart';
 
 class PlayerListPage extends StatefulWidget {
-  const PlayerListPage({super.key});
+  final User user;
+  const PlayerListPage({super.key, required this.user});
 
   @override
-  State<PlayerListPage> createState() => _PlayerListPageState();
+  State<PlayerListPage> createState() => _PlayerListPageState(user: user);
 }
 
 class _PlayerListPageState extends State<PlayerListPage> {
+  final User user;
+
+  _PlayerListPageState({required this.user});
   List<Player> players = [];
   List<Class> grade = [];
   List<Leagues> leagues = [];
@@ -142,6 +147,16 @@ class _PlayerListPageState extends State<PlayerListPage> {
     });
   }
 
+  void _navigateAndDisplayPlayers(BuildContext context) async {
+    await Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => PlayerVersus(players: selectedPlayers, flags: flags, grade: grade, clubs: clubs)));
+    if (mounted) {
+      setState(() {
+        selectedPlayers = [];
+        isVisible = false;
+      });
+    }
+  }
+
   //선수검색 기능
   String searchText = "";
   bool _isSearchBarVisible = false;
@@ -152,16 +167,6 @@ class _PlayerListPageState extends State<PlayerListPage> {
         context,
         MaterialPageRoute(builder: (context)=>ContentPage(content : content))
     );
-  }
-
-  void _navigateAndDisplayPlayers(BuildContext context) async {
-    await Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => PlayerVersus(players: selectedPlayers, flags: flags, grade: grade, clubs: clubs)));
-    if (mounted) {
-      setState(() {
-        selectedPlayers = [];
-        isVisible = false;
-      });
-    }
   }
 
   @override
@@ -263,19 +268,17 @@ class _PlayerListPageState extends State<PlayerListPage> {
                                   Text(" "+player.nation,overflow: TextOverflow.fade ,maxLines: 1)
                                 ],
                               ),
-                              trailing: Container(
-                                child: Text(
-                                  player.position+"  "+player.overall.toString(),
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
-                                    color: positionColor(player.position.toString()),
-                                  ),
+                              trailing: Text(
+                                player.position+"  "+player.overall.toString(),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                  color: positionColor(player.position.toString()),
                                 ),
                               ),
-                              onTap: () async {
+                              onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (BuildContext context) => PlayerDetailPage(player: player, flagUrl: flagUrl, classUrl: classUrl, clubUrl: clubUrl)));
+                                    builder: (BuildContext context) => PlayerDetailPage(player: player, flagUrl: flagUrl, classUrl: classUrl, clubUrl: clubUrl, user: user)));
                               },
                             ),
                           ),
@@ -296,7 +299,7 @@ class _PlayerListPageState extends State<PlayerListPage> {
 class ContentPage extends StatelessWidget {
   final String content;
 
-  const ContentPage({Key? key, required this.content}) : super(key: key);
+  const ContentPage({super.key, required this.content});
 
   @override
   Widget build(BuildContext context) {

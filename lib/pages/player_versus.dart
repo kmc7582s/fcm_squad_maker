@@ -95,9 +95,9 @@ class PlayerVersus extends StatelessWidget {
                 child: DataTable(
                   columnSpacing: 28.0,
                   columns: [
-                    DataColumn(label: Center(child: Container(width: 100,child:animated_text(players[0].name)))),
+                    DataColumn(label: Center(child: animated_text(" "+players[0].name))),
                     DataColumn(label: Center(child: Text("선수명"))),
-                    DataColumn(label: Center(child: Container(width: 100,child:animated_text(players[1].name)))),
+                    DataColumn(label: Center(child: animated_text(" "+players[1].name))),
                   ],
                   rows: [
                     dataRow(players[0].pace, "페이스", players[1].pace),
@@ -117,16 +117,19 @@ class PlayerVersus extends StatelessWidget {
   }
 
   Widget animated_text(String text) {
-    return Marquee(
-      text: text,
-      velocity: 50.0,
-      blankSpace: 50,
-      startPadding: 4.0,
-      pauseAfterRound: Duration(milliseconds: 2000),
-      accelerationDuration: Duration(seconds: 1),
-      accelerationCurve: Curves.linear,
-      decelerationDuration: Duration(milliseconds: 500),
-      decelerationCurve: Curves.easeOut,
+    return Container(
+      width: 90,
+      child: Marquee(
+        text: text,
+        velocity: 50.0,
+        blankSpace: 50,
+        startPadding: 4.0,
+        pauseAfterRound: Duration(milliseconds: 2000),
+        accelerationDuration: Duration(seconds: 1),
+        accelerationCurve: Curves.linear,
+        decelerationDuration: Duration(milliseconds: 500),
+        decelerationCurve: Curves.easeOut,
+      ),
     );
   }
 
@@ -155,10 +158,4 @@ class PlayerVersus extends StatelessWidget {
       ],
     );
   }
-
-  // Widget polarCoordinate() {
-  //   return PolarCoord(
-  //
-  //   );
-  // }
 }

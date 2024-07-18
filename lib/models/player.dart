@@ -6,6 +6,7 @@ part 'player.g.dart';
 @freezed
 class Player with _$Player {
   factory Player({
+    required int id,
     required String name,
     required String nation,
     required String club,
@@ -20,8 +21,8 @@ class Player with _$Player {
     required int physical,
     required int l_foot,
     required int r_foot,
+    required dynamic likes,
     @Default('') String img,
-    @Default('') String price,
   }) = _Player;
 
   factory Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);

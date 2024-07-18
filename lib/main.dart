@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: "FC모바일 스쿼드 메이커",
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),

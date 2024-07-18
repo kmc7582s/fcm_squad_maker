@@ -29,7 +29,7 @@ class _NavigationState extends State<Navigation> {
       body: Center(
         child: IndexedStack(
           index: selectedIndex,
-          children: [HomePage(), SquadListPage(), PlayerListPage(), SettingPage(user: user)],
+          children: [HomePage(), SquadListPage(), PlayerListPage(user: user), SettingPage(user: user)],
         ),
       ),
       bottomNavigationBar: NavigationBar(

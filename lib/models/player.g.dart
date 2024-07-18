@@ -7,6 +7,7 @@ part of 'player.dart';
 // **************************************************************************
 
 _$PlayerImpl _$$PlayerImplFromJson(Map<String, dynamic> json) => _$PlayerImpl(
+      id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       nation: json['nation'] as String,
       club: json['club'] as String,
@@ -21,12 +22,13 @@ _$PlayerImpl _$$PlayerImplFromJson(Map<String, dynamic> json) => _$PlayerImpl(
       physical: (json['physical'] as num).toInt(),
       l_foot: (json['l_foot'] as num).toInt(),
       r_foot: (json['r_foot'] as num).toInt(),
+      likes: json['likes'],
       img: json['img'] as String? ?? '',
-      price: json['price'] as String? ?? '',
     );
 
 Map<String, dynamic> _$$PlayerImplToJson(_$PlayerImpl instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'name': instance.name,
       'nation': instance.nation,
       'club': instance.club,
@@ -41,6 +43,6 @@ Map<String, dynamic> _$$PlayerImplToJson(_$PlayerImpl instance) =>
       'physical': instance.physical,
       'l_foot': instance.l_foot,
       'r_foot': instance.r_foot,
+      'likes': instance.likes,
       'img': instance.img,
-      'price': instance.price,
     };
