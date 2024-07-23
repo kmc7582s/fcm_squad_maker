@@ -1,10 +1,10 @@
-import 'package:fcmobile_squad_maker/Navigation.dart';
-import 'package:fcmobile_squad_maker/config/color.dart';
 import 'package:fcmobile_squad_maker/config/fonts.dart';
-import 'package:fcmobile_squad_maker/pages/member/edit_account.dart';
+import 'package:fcmobile_squad_maker/main.dart';
 import 'package:fcmobile_squad_maker/pages/member/signup_page.dart';
+import 'package:fcmobile_squad_maker/widgets/textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,6 +17,7 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _pwController = TextEditingController();
   String _statusMessage = '';
+  bool _isLoading = false;
   final _auth = FirebaseAuth.instance;
 
   Future<void> _signIn() async {
@@ -24,19 +25,44 @@ class _LoginPageState extends State<LoginPage> {
       final UserCredential userCredential =
           await _auth.signInWithEmailAndPassword(
               email: _emailController.text, password: _pwController.text);
-
       if (userCredential.user != null) {
         setState(() {
           _statusMessage = '로그인 성공';
           print(_statusMessage);
-          Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (context) => Navigation(user: userCredential.user!)));
         });
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const MyApp()));
       }
     } on FirebaseAuthException catch (e) {
       setState(() {
-        _statusMessage = e.message ?? '로그인 실패';
+        if (e.code == 'user-not-found') {
+          _statusMessage = '등록되지 않은 이메일입니다';
+        } else if (e.code == 'wrong-password') {
+          _statusMessage = '비밀번호가 틀렸습니다';
+        } else {
+          _statusMessage = e.code;
+        }
         print(_statusMessage);
+      });
+    }
+  }
+
+  Future<void> _sendEditPassword() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await _auth.sendPasswordResetEmail(email: _emailController.text.trim());
+      setState(() {
+        _statusMessage = '비밀번호 재설정 이메일이 발송되었습니다.';
+      });
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        _statusMessage = '오류: 이메일을 입력해주세요.';
+      });
+    } finally {
+      setState(() {
+        _isLoading = false;
       });
     }
   }
@@ -52,7 +78,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SingleChildScrollView(
-      child: SizedBox(
+      child: Container(
+        color: const Color(0xFF2A2B2F),
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: Stack(
@@ -64,18 +91,24 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Make your",
-                    style: Fonts.largeTitle,
-                  ),
-                  Text(
-                    "Squad",
-                    style: Fonts.largeTitle,
-                  ),
-                  Text(
-                    "For FC Mobile",
-                    style: Fonts.largeTitle,
-                  ),
+                  const Text(
+                    "Make your\nSquad\nFor FC Mobile",
+                    style: CustomTextStyle.loginTitle,
+                  ).animate(adapter: ValueAdapter(0.5)).shimmer(
+                      colors: [
+                        const Color(0xFF0fff37),
+                        const Color(0xFF15ff4c),
+                        const Color(0xFF1aff61),
+                        const Color(0xFF20ff75),
+                        const Color(0xFF26ff8a),
+                        const Color(0xFF2bff9f),
+                        const Color(0xFF31ffb4),
+                        const Color(0xFF37ffc8),
+                      ]
+                  ).animate(onPlay: (controller) => controller.repeat(reverse: true))
+                      .saturate(delay: 1.seconds, duration: 1.seconds)
+                      .then()
+                      .tint(color: const Color(0xFF80DDFF)),
                 ],
               ),
             ),
@@ -93,13 +126,13 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.all(10),
                   child: Column(
                     children: [
-                      Row(
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                             "로그인",
-                            style: Fonts.title,
+                            style: CustomTextStyle.label,
                           ),
                         ],
                       ),
@@ -122,24 +155,25 @@ class _LoginPageState extends State<LoginPage> {
                             TextButton(
                               child: Text(
                                 "회원가입",
-                                style: Fonts.label,
+                                style: CustomTextStyle.sublabel,
                               ),
                               onPressed: () => Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (context) => const SignupPage())),
+                                  MaterialPageRoute(builder: (context) => SignupPage())),
                             ),
                             TextButton(
+                              onPressed: _sendEditPassword,
                               child: Text(
-                                "계정 찾기",
-                                style: Fonts.label,
-                              ),
-                              onPressed: () => Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (context) => const EditAccountPage())),
+                                "비밀번호 찾기",
+                                style:  CustomTextStyle.sublabel,
+                              )
                             ),
                           ],
                         ),
                       ),
                       ElevatedButton(
-                          onPressed: () => _signIn(), child: const Text("로그인")),
+                          onPressed: () => _signIn(),
+                          child: const Text("로그인")
+                      ),
                       Text(_statusMessage, style: TextStyle(color: Colors.red),)
                     ],
                   ),
@@ -150,20 +184,5 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     ));
-  }
-
-  Widget textField(String hint, TextEditingController controller, bool isId) {
-    return TextField(
-      controller: controller,
-      obscureText: isId,
-      decoration: InputDecoration(
-          hintText: hint,
-          hintStyle: const TextStyle(color: Palette.base3),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Palette.base1),
-          ),
-          label: Text(hint)),
-    );
   }
 }

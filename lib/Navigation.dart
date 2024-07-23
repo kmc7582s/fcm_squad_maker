@@ -1,5 +1,5 @@
-import 'package:fcmobile_squad_maker/pages/player_list.dart';
-import 'package:fcmobile_squad_maker/pages/squad_list.dart';
+import 'package:fcmobile_squad_maker/pages/playerinfo/player_list.dart';
+import 'package:fcmobile_squad_maker/pages/squadmaker/squad_list.dart';
 import 'package:fcmobile_squad_maker/pages/home.dart';
 import 'package:fcmobile_squad_maker/pages/setting.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,7 +29,7 @@ class _NavigationState extends State<Navigation> {
       body: Center(
         child: IndexedStack(
           index: selectedIndex,
-          children: [HomePage(), SquadListPage(), PlayerListPage(user: user), SettingPage(user: user)],
+          children: [HomePage(), SquadListPage(), PlayerListPage(), SettingPage(user: user)],
         ),
       ),
       bottomNavigationBar: NavigationBar(
