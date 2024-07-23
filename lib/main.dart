@@ -35,12 +35,12 @@ class MyApp extends StatelessWidget {
             User? user = snapshot.data;
 
             if (user == null) {
-              return LoginPage();
+              return const LoginPage();
             }
             return Navigation(user: user);
           }
 
-          return Scaffold(
+          return const Scaffold(
             body: Center(child: CircularProgressIndicator(),),
           );
         },
