@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-const String field = "assets/images/field.jpg";
+const String field = "assets/images/field.png";
 const String logo = 'assets/images/test_logo.png';
 
 class IconSrc {

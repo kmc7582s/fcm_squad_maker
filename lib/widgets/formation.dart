@@ -1,5 +1,6 @@
 import 'package:fcmobile_squad_maker/config/assets.dart';
 import 'package:fcmobile_squad_maker/config/color.dart';
+import 'package:fcmobile_squad_maker/pages/squadmaker/search_player.dart';
 import 'package:flutter/material.dart';
 
 class FW extends StatelessWidget {
@@ -90,21 +91,24 @@ class DF extends StatelessWidget {
 }
 
 class GK extends StatelessWidget {
-  const GK({super.key});
+  const GK({super.key, required player});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
-          width: 30,
-          height: 30,
-          decoration: BoxDecoration(
-            color: Colors.grey.withOpacity(0.9),
-            borderRadius: BorderRadius.circular(20),
+        InkWell(
+          child: Container(
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(0.9),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Icon(IconSrc.add,color: Palette.gkColor),
           ),
-          child: Icon(IconSrc.add,color: Palette.gkColor),
+          onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Search())),
         ),
         Text(
           "GK",
