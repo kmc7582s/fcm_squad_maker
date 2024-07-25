@@ -10,33 +10,6 @@ class PlayerVersus extends StatelessWidget {
 
   const PlayerVersus({super.key, required this.players, this.flags, this.grade, this.clubs});
 
-  String? getFlagUrl(String nation) {
-    for (var flag in flags) {
-      if (flag.nation == nation) {
-        return flag.img;
-      }
-    }
-    return null; // 국기를 찾지 못한 경우
-  }
-
-  String? getClassUrl(String p_class) {
-    for (var grade in grade) {
-      if (grade.grade == p_class) {
-        return grade.img;
-      }
-    }
-    return null;
-  }
-
-  String? getClubUrl(String club) {
-    for (var clubs in clubs) {
-      if (clubs.club == club) {
-        return clubs.img;
-      }
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

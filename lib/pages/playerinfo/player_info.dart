@@ -125,7 +125,7 @@ class _PlayerDetailPageState extends State<PlayerDetailPage> {
         centerTitle: false,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.chevron_left),
+          icon: const Icon(Icons.chevron_left),
         ),
         actions: [
           IconButton(
@@ -136,150 +136,147 @@ class _PlayerDetailPageState extends State<PlayerDetailPage> {
           SizedBox(width: 20,)
         ],
       ),
-      body: Container(
-        color: const Color(0x998898A0),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                      top: 20, left: 10, right: 10, bottom: 10),
-                  child: Stack(
-                    alignment: Alignment.center,
+      body: Column(
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                    top: 20, left: 10, right: 10, bottom: 10),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Image.network(classUrl, width: 120, height: 120),
+                    Image.network(player.img, width: 120, height: 120),
+                  ],
+                ),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    player.grade,
+                    style: CustomTextStyle.gradeTitle
+                  ),
+                  Text(
+                    player.name,
+                    style: CustomTextStyle.playerTitle
+                  ),
+                  Row(
                     children: [
-                      Image.network(classUrl, width: 120, height: 120),
-                      Image.network(player.img, width: 120, height: 120),
+                      Image.network(flagUrl, width: 30),
+                      Text(" " + player.nation),
                     ],
                   ),
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      player.grade,
-                      style: CustomTextStyle.gradeTitle
-                    ),
-                    Text(
-                      player.name,
-                      style: CustomTextStyle.playerTitle
-                    ),
-                    Row(
-                      children: [
-                        Image.network(flagUrl, width: 30),
-                        Text(" " + player.nation),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Image.network(clubUrl, width: 30),
-                        Text(" " + player.club),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
-              child: Card(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      player.position +
-                          " " +
-                          (player.overall + _enforce + _increase).toString(),
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: positionColor(player.position)),
-                    ),
-                    Text("foot (L:${player.l_foot} R:${player.r_foot})"),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    DropdownButton(
-                      value: _enforce,
-                      items: enforce
-                          .map((e) => DropdownMenuItem(
-                                value: e,
-                                child: Text("강화 $e"),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _enforce = value!;
-                        });
-                      },
-                    ),
-                    DropdownButton(
-                      value: _evolution,
-                      items: test
-                          .map((e) => DropdownMenuItem(
-                                value: e[0],
-                                child: Text("진화 ${e[0]}"),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _evolution = value!;
-                          if (player.overall >= 110) {
-                            _increase = test[_evolution][1];
-                          } else {
-                            _increase = test[_evolution][1] - test[_evolution][0];
-                          }
-                        });
-                      },
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                  ],
-                ),
+                  Row(
+                    children: [
+                      Image.network(clubUrl, width: 30),
+                      Text(" " + player.club),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
+            child: Card(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    player.position +
+                        " " +
+                        (player.overall + _enforce + _increase).toString(),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: positionColor(player.position)),
+                  ),
+                  Text("foot (L:${player.l_foot} R:${player.r_foot})"),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  DropdownButton(
+                    value: _enforce,
+                    items: enforce
+                        .map((e) => DropdownMenuItem(
+                              value: e,
+                              child: Text("강화 $e"),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _enforce = value!;
+                      });
+                    },
+                  ),
+                  DropdownButton(
+                    value: _evolution,
+                    items: test
+                        .map((e) => DropdownMenuItem(
+                              value: e[0],
+                              child: Text("진화 ${e[0]}"),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _evolution = value!;
+                        if (player.overall >= 110) {
+                          _increase = test[_evolution][1];
+                        } else {
+                          _increase = test[_evolution][1] - test[_evolution][0];
+                        }
+                      });
+                    },
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Card(
-                elevation: 10,
-                shadowColor: Colors.black,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        PlayerStatGauge(player.pace + _enforce + _increase,
-                            stat_title[0].toString()),
-                        PlayerStatGauge(player.shooting + _enforce + _increase,
-                            stat_title[1].toString()),
-                        PlayerStatGauge(player.passing + _enforce + _increase,
-                            stat_title[2].toString()),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        PlayerStatGauge(player.agility + _enforce + _increase,
-                            stat_title[3].toString()),
-                        PlayerStatGauge(player.defending + _enforce + _increase,
-                            stat_title[4].toString()),
-                        PlayerStatGauge(player.physical + _enforce + _increase,
-                            stat_title[5].toString()),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    )
-                  ],
-                ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Card(
+              elevation: 10,
+              shadowColor: Colors.black,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      PlayerStatGauge(player.pace + _enforce + _increase,
+                          stat_title[0].toString()),
+                      PlayerStatGauge(player.shooting + _enforce + _increase,
+                          stat_title[1].toString()),
+                      PlayerStatGauge(player.passing + _enforce + _increase,
+                          stat_title[2].toString()),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      PlayerStatGauge(player.agility + _enforce + _increase,
+                          stat_title[3].toString()),
+                      PlayerStatGauge(player.defending + _enforce + _increase,
+                          stat_title[4].toString()),
+                      PlayerStatGauge(player.physical + _enforce + _increase,
+                          stat_title[5].toString()),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  )
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

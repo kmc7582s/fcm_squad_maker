@@ -1,7 +1,5 @@
-import 'package:fcmobile_squad_maker/config/color.dart';
 import 'package:fcmobile_squad_maker/config/fonts.dart';
 import 'package:fcmobile_squad_maker/models/club/clubs.dart';
-import 'package:fcmobile_squad_maker/pages/playerinfo/player_info.dart';
 import 'package:fcmobile_squad_maker/pages/playerinfo/player_versus.dart';
 import 'package:fcmobile_squad_maker/widgets/player_list.dart';
 import 'package:flutter/material.dart';
@@ -202,16 +200,37 @@ class _PlayerListPageState extends State<PlayerListPage> {
         children: [
           Visibility(
             visible: _isSearchBarVisible,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SearchBar(
-                hintText: '선수명을 입력해주세요.',
-                onChanged: (value) {
-                  setState(() {
-                    searchText = value;
-                  });
-                },
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: 310,
+                    child: SearchBar(
+                      hintText: '선수명을 입력해주세요.',
+                      leading: const Icon(Icons.search),
+                      onChanged: (value) {
+                        setState(() {
+                          searchText = value;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0, right: 8.0, bottom: 8.0),
+                  child: Container(
+                    width: 55,
+                    height: 55,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(30)
+                    ),
+                    child: IconButton(icon: Icon(Icons.filter_list), onPressed: () {  },),
+                  ),
+                )
+              ],
             ),
           ),
           Divider(),
@@ -244,7 +263,7 @@ class _PlayerListPageState extends State<PlayerListPage> {
                               },
                             ),
                           ),
-                          Expanded(child: PlayerList(classUrl, flagUrl, clubUrl, player, context)),
+                          Expanded(child: PlayerList(classUrl, flagUrl!, clubUrl, player, context)),
                         ],
                       ),
                     );
