@@ -153,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             TextButton(
-                              child: Text(
+                              child: const Text(
                                 "회원가입",
                                 style: CustomTextStyle.sublabel,
                               ),
@@ -162,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             TextButton(
                               onPressed: _sendEditPassword,
-                              child: Text(
+                              child: const Text(
                                 "비밀번호 찾기",
                                 style:  CustomTextStyle.sublabel,
                               )

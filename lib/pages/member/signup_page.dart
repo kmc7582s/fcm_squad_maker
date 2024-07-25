@@ -263,7 +263,7 @@ class _SignupPageState extends State<SignupPage> {
       children: [
         Text(
           text,
-          style: Fonts.parag4,
+          style: CustomTextStyle.settingLabel2,
         ),
       ],
     );
