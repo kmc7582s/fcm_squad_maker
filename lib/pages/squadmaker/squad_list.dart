@@ -63,6 +63,8 @@ class _SquadListPageState extends State<SquadListPage> {
                     'teams': value['teams'],
                     'formation': value['formation'],
                     'team_logo': value['team_logo'],
+                    'average_ovr' : '',
+                    'player' : '',
                   });
                 });
                 return ListView.separated(
@@ -74,7 +76,7 @@ class _SquadListPageState extends State<SquadListPage> {
                       subtitle: Text('평균 OVR | Formation: ${squadList[index]['formation']}'),
                       trailing: PopupMenuButton<int>(
                         itemBuilder: (context) => [
-                          PopupMenuItem(
+                          const PopupMenuItem(
                             value: 1,
                             child: Text("찜하기"),
                           ),
@@ -86,7 +88,7 @@ class _SquadListPageState extends State<SquadListPage> {
                         ],
                         icon: Icon(Icons.more_vert),
                       ),
-                      onTap: () =>  Navigator.of(context).push(MaterialPageRoute(builder: (context) => SquadMakerPage(player: '',))),
+                      onTap: () =>  Navigator.of(context).push(MaterialPageRoute(builder: (context) => SquadMakerPage(player: '', squadId: squadList[index]['id']))),
                     );
                   },
                   separatorBuilder: (context,index) {

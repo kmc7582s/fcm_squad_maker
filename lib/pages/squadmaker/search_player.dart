@@ -152,6 +152,7 @@ class _SearchState extends State<Search> {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: SearchBar(
+              leading: Icon(Icons.search),
               hintText: '선수명을 입력해주세요.',
               onChanged: (value) {
                 setState(() {
@@ -179,15 +180,15 @@ class _SearchState extends State<Search> {
                   return Card(
                       child: Row(
                         children: [
-                          Expanded(child: PlayerList(classUrl, flagUrl, clubUrl, player, context)),
+                          Expanded(child: PlayerList(classUrl, flagUrl!, clubUrl, player, context)),
                           PopupMenuButton(
                             itemBuilder: (context) => [
                               PopupMenuItem(
                                 child: Text("선수 선택"),
-                                onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => GK(player: player))),
+                                onTap: () => Navigator.pop(context, player),
                               ),
                             ],
-                            icon: Icon(Icons.more_vert),
+                            icon: Icon(Icons.add),
                           ),
                         ],
                       )

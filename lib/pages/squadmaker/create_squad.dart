@@ -100,7 +100,7 @@ class _CreateSquadPageState extends State<CreateSquadPage> {
   Future<void> createSquad() async {
     User? user = _auth.currentUser;
     if (user != null) {
-      DatabaseReference _database = FirebaseDatabase.instance.ref().child('users').child('${user.uid}').child('squads').push();
+      DatabaseReference _database = FirebaseDatabase.instance.ref().child('users').child(user.uid).child('squads').push();
       String squadId = _database.key!;
       _database.set({
         'id' : squadId,
@@ -110,7 +110,7 @@ class _CreateSquadPageState extends State<CreateSquadPage> {
         'team_logo' : getClubUrl(selectedOption1).toString(),
       });
 
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => SquadMakerPage(player: '',)));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => SquadMakerPage(player: '', squadId: squadId,)));
     }
   }
 
@@ -118,26 +118,26 @@ class _CreateSquadPageState extends State<CreateSquadPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("스쿼드 생성"),
+        title: const Text("스쿼드 생성"),
         centerTitle: false,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.chevron_left),
+          icon: const Icon(Icons.chevron_left),
         ),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 20, left: 12.0),
+            const Padding(
+              padding: EdgeInsets.only(top: 20, left: 16.0),
               child: Row(
                 children: [
-                  Text("스쿼드 제목",style: Fonts.subtitle2,),
+                  Text("스쿼드 제목",style: CustomTextStyle.createsquadTitle,),
                 ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.only(top: 14, left: 16, right: 16),
               child: TextField(
                 controller: _titleController,
                 decoration: const InputDecoration(
@@ -152,66 +152,50 @@ class _CreateSquadPageState extends State<CreateSquadPage> {
             Padding(
               padding: const EdgeInsets.only(top: 18, left: 12.0, right: 12),
               child: Card(
-                color: Colors.grey,
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 16.0),
+                      padding: const EdgeInsets.only(top: 16.0, left: 16.0),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Text("팀 선택",style: Fonts.subtitle2,),
-                          Container(
-                            width: 230,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: Colors.black),
-                              color: Colors.white,
-                            ),
-                            child: DropdownButton<String>(
-                              value: selectedOption1,
-                              icon: Icon(Icons.arrow_drop_down),
-                              iconSize: 24,
-                              elevation: 16,
-                              onChanged: (dynamic newValue) {
-                                setState(() {
-                                  selectedOption1 = newValue;
-                                });
-                              },
-                              items: team[selectedLeague]!
-                                  .map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(value: value, child: Row(
+                          Text("팀 선택",style: CustomTextStyle.createsquadTitle,),
+                          DropdownButton<String>(
+                            value: selectedLeague,
+                            items: team.keys.map((String league) {
+                              return DropdownMenuItem<String>(
+                                value: league,
+                                child: Row(
                                   children: [
-                                    Image.network(getClubUrl(value).toString(),width: 20,height: 20,),
-                                    Text(" "+value),
+                                    Image.network(getLeagueUrl(league).toString(),width: 20,height: 20,),
+                                    const SizedBox(width: 20,),
+                                    Text(league),
                                   ],
-                                ));
-                              }).toList(),
-                            ),
-                          )
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedLeague = newValue!;
+                                selectedOption1 = '';
+                              });
+                              _showTeamDialog();
+                            },
+                          ),
                         ],
                       ),
                     ),
-                    Column(
-                      children: categories_team.map((String category) {
-                        return RadioListTile<String>(
-                            title: Row(
-                              children: [
-                                Image.network(getLeagueUrl(category).toString(),width: 30,height: 30,),
-                                SizedBox(width: 10,),
-                                Text(category),
-                              ],
-                            ),
-                            value: category,
-                            groupValue: selectedLeague,
-                            onChanged: (dynamic value) {
-                              setState(() {
-                                selectedLeague = value;
-                                selectedOption1 = team[selectedLeague]!.first;
-                              });
-                            });
-                      }).toList(),
-                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.network(getClubUrl(selectedOption1).toString(),width: 25,height: 25,),
+                          const SizedBox(width: 10,),
+                          Text(selectedOption1, style: CustomTextStyle.label,),
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -226,8 +210,8 @@ class _CreateSquadPageState extends State<CreateSquadPage> {
                       padding: const EdgeInsets.only(left: 16.0),
                       child: Row(
                         children: [
-                          Text("포메이션 선택",style: Fonts.subtitle2,),
-                          SizedBox(width: 100),
+                          const Text("포메이션 선택",style: CustomTextStyle.createsquadTitle,),
+                          const SizedBox(width: 100),
                           Padding(
                             padding: const EdgeInsets.only(top: 6),
                             child: Container(
@@ -240,7 +224,7 @@ class _CreateSquadPageState extends State<CreateSquadPage> {
                               ),
                               child: DropdownButton<String>(
                                 value: selectedOption2,
-                                icon: Icon(Icons.arrow_drop_down),
+                                icon: const Icon(Icons.arrow_drop_down),
                                 iconSize: 24,
                                 elevation: 16,
                                 onChanged: (dynamic newValue) {
@@ -281,7 +265,6 @@ class _CreateSquadPageState extends State<CreateSquadPage> {
               onPressed: () {
                 createSquad();
               },
-              child: Text("생성", style: TextStyle(color: Colors.white)),
               style: ElevatedButton.styleFrom(
                   minimumSize: Size(300, 50),
                   shape: RoundedRectangleBorder(
@@ -289,11 +272,43 @@ class _CreateSquadPageState extends State<CreateSquadPage> {
                   ),
                   backgroundColor: Colors.blue
               ),
+              child: const Text("생성", style: TextStyle(color: Colors.white)),
             ),
             SizedBox(height: 20,)
           ],
         ),
       ),
+    );
+  }
+  void _showTeamDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('팀 선택'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: team[selectedLeague]!.map((String team) {
+                return ListTile(
+                  title: Row(
+                    children: [
+                      Image.network(getClubUrl(team).toString(),width: 20, height: 20,),
+                      SizedBox(width: 10,),
+                      Text(team),
+                    ],
+                  ),
+                  onTap: () {
+                    setState(() {
+                      selectedOption1 = team;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                );
+              }).toList(),
+            ),
+          ),
+        );
+      },
     );
   }
 }
