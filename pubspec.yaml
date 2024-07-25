@@ -47,6 +47,8 @@ dependencies:
   provider:
   flutter_animate :
   rive:
+  kakao_flutter_sdk_talk: ^1.9.5
+
 
 
 

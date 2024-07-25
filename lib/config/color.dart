@@ -10,6 +10,7 @@ class Palette {
 
   static const Color base1 = Color(0xFF000000);
   static const Color base2 = Color(0xFF7C7C7C);
+  static const Color basepl = Color(0xff7c7c7cff);
   static const Color base3 = Color(0xFF8B8B8B);
   static const Color base4 = Color(0xFF9D9D9D);
   static const Color base5 = Color(0xFFA4A4A4);

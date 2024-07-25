@@ -24,6 +24,30 @@ class CustomTextStyle {
       letterSpacing: 1,
       color: Colors.blue);
 
+  static const settingTitle = TextStyle(fontFamily: "Pretendard",
+      fontWeight: FontWeight.w700,
+      fontSize: 20,
+      letterSpacing: 1.6,
+      color: Colors.black);
+
+  static const settingLabel = TextStyle(fontFamily: "Pretendard",
+      fontWeight: FontWeight.w400,
+      fontSize: 16,
+      letterSpacing: 1.6,
+      color: Colors.black);
+
+  static const settingLabel2 = TextStyle(fontFamily: "Pretendard",
+      fontWeight: FontWeight.w400,
+      fontSize: 14,
+      letterSpacing: 1.6,
+      color: Colors.black);
+
+  static const versionLabel = TextStyle(fontFamily: "Pretendard",
+      fontWeight: FontWeight.w400,
+      fontSize: 14,
+      letterSpacing: 1.6,
+      color: Color(0xFF666870));
+
   static const loginTitle = TextStyle(
     fontFamily: "Pretendard",
     fontWeight: FontWeight.w600,
@@ -58,53 +82,37 @@ class CustomTextStyle {
     fontSize: 15,
   );
 
+  static const createsquadTitle = TextStyle(
+    fontFamily: "Pretendard",
+    fontWeight: FontWeight.w700,
+    fontSize: 18,
+    letterSpacing: 1
+  );
+
+  static const playerName = TextStyle(
+    fontFamily: "Pretendard",
+    fontWeight: FontWeight.w600,
+    letterSpacing: 1,
+    fontSize: 12,
+    color: Colors.amber,
+  );
+
+  static const statemessage = TextStyle(
+    fontFamily: "Pretendard",
+    fontWeight: FontWeight.w400,
+    letterSpacing: 1,
+    fontSize: 11,
+    color: Colors.red,
+  );
 }
 
 
 class Fonts {
   Fonts._();
-
-  static final TextStyle test = GoogleFonts.rubik(
-      fontSize: 16,
-      fontWeight: FontWeight.w700,
-      letterSpacing: 1.6,
-      color: Colors.black
-  );
-
-  static final TextStyle subtitle2 = GoogleFonts.roboto(
-    fontSize: 18,
-    fontWeight: FontWeight.w500,
-    letterSpacing: 1,
-  );
-
   static final TextStyle player = GoogleFonts.roboto(
     fontSize: 16,
     fontWeight: FontWeight.bold,
     letterSpacing: 1,
     color: Colors.amber
-  );
-
-  static final TextStyle parag1 = GoogleFonts.roboto(
-    fontSize: 16,
-    fontWeight: FontWeight.w700,
-    letterSpacing: 1,
-  );
-
-  static final TextStyle parag2 = GoogleFonts.roboto(
-    fontSize: 16,
-    fontWeight: FontWeight.w400,
-    letterSpacing: 1,
-  );
-
-  static final TextStyle parag3 = GoogleFonts.roboto(
-    fontSize: 14,
-    fontWeight: FontWeight.w700,
-    letterSpacing: 1,
-  );
-
-  static final TextStyle parag4 = GoogleFonts.roboto(
-    fontSize: 14,
-    fontWeight: FontWeight.w500,
-    letterSpacing: 1,
   );
 }
