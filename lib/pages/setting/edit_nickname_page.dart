@@ -23,6 +23,7 @@ class _EditNicknamePageState extends State<EditNicknamePage> {
 
   @override
   void initState() {
+    super.initState();
     _fetchUserData();
   }
 

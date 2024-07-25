@@ -3,8 +3,6 @@ import 'package:fcmobile_squad_maker/models/club/clubs.dart';
 import 'package:fcmobile_squad_maker/models/flag/flags.dart';
 import 'package:fcmobile_squad_maker/models/league/leagues.dart';
 import 'package:fcmobile_squad_maker/models/player.dart';
-import 'package:fcmobile_squad_maker/pages/squadmaker/squad_maker.dart';
-import 'package:fcmobile_squad_maker/widgets/formation.dart';
 import 'package:fcmobile_squad_maker/widgets/player_list.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';

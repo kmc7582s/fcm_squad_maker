@@ -43,7 +43,7 @@ class _SquadMakerPageState extends State<SquadMakerPage> with SingleTickerProvid
     int mfCount = int.parse(positions[1]);
     int dfCount = int.parse(positions[2]);
 
-    List<List<dynamic?>> newFormation = [
+    List<List<dynamic>> newFormation = [
       List.filled(dfCount, null),
       List.filled(mfCount, null),
       List.filled(fwCount, null),
@@ -207,7 +207,7 @@ class _SquadMakerPageState extends State<SquadMakerPage> with SingleTickerProvid
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: formation.asMap().entries.map((entry) {
                             int rowIdx = entry.key;
-                            List<dynamic?> line = entry.value;
+                            List<dynamic> line = entry.value;
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: line.asMap().entries.map((entry) {
