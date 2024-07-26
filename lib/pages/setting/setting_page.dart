@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:fcmobile_squad_maker/config/fonts.dart';
 import 'package:fcmobile_squad_maker/pages/member/login_page.dart';
@@ -6,7 +7,10 @@ import 'package:fcmobile_squad_maker/pages/setting/edit_nickname_page.dart';
 import 'package:fcmobile_squad_maker/pages/setting/edit_password_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 
 class SettingPage extends StatefulWidget {
   final User user;
@@ -17,9 +21,14 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  // final FirebaseAuth _auth = FirebaseAuth.instance;
-  Map<String, dynamic>? _userData;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final User user;
+  final _userUpdateRef = FirebaseDatabase.instance.ref().child('users');
+  String _nickname = '';
+  String _profileImg = '';
+  final ImagePicker _picker = ImagePicker();
+  File? _image;
+  String _imageUrl = '';
 
   _SettingPageState({required this.user});
 
@@ -29,26 +38,108 @@ class _SettingPageState extends State<SettingPage> {
     _fetchUserData();
   }
 
-  Future<void> _fetchUserData() async {
-    final DatabaseReference _database = FirebaseDatabase.instance.ref().child('users').child(user.uid);
-    DatabaseEvent event = await _database.once();
-    setState(() {
-      _userData = Map<String, dynamic>.from(event.snapshot.value as Map);
-    });
+  // 프로필 이미지 변경
+  Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+      _uploadImage();
+    }
   }
 
+  Future<void> _uploadImage() async {
+    User? user = _auth.currentUser;
+    if (user != null && _image != null) {
+      final storageRef = FirebaseStorage.instance.ref().child('users').child('${user.uid}.png');
+
+      try {
+        await storageRef.putFile(_image!);
+        String imageUrl = await storageRef.getDownloadURL();
+        setState(() {
+          _imageUrl = imageUrl;
+        });
+        _updateProfilePictureUrl();
+      } catch (e) {
+        print('Error uploading image: $e');
+      }
+    }
+  }
+
+  Future<void> _updateProfilePictureUrl() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      final userRef = FirebaseDatabase.instance.ref().child('users').child(user.uid);
+      await userRef.update({
+        'profile_img': _imageUrl,
+      }).then((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Profile picture updated successfully')),
+        );
+      }).catchError((error) {
+        print('Error updating profile picture URL: $error');
+      });
+    }
+  }
+
+  // 닉네임, 프로필 이미지 업데이트
+  Future<void> _fetchUserData() async {
+    final DatabaseReference _database = _userUpdateRef.child(user.uid);
+
+    if (user != null) {
+      _database.onValue.listen((event) {
+        final snapshot = event.snapshot;
+        if (snapshot.exists) {
+          final data = snapshot.value as Map<dynamic, dynamic>;
+          setState(() {
+            _nickname = data['nickname'] ?? 'Unknown';
+            _profileImg = data['profile_img'] ?? 'Unknown';
+          });
+        }
+      });
+    }
+  }
+
+  // 로그아웃
   Future<void> _signOut(BuildContext context) async {
     try {
-      await FirebaseAuth.instance.signOut();
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage()));
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('로그아웃 확인'),
+            content: const Text('로그아웃 하시겠습니까?'),
+            actions: [
+              TextButton(
+                onPressed: () async {
+                  try {
+                    await _auth.signOut();
+                    Navigator.of(context).pop();
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage()));
+                  } catch (e) {
+                    // 로그아웃 오류 처리
+                    print('로그아웃 오류: $e');
+                  }
+                },
+                child: const Text('로그아웃'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('취소'),
+              ),
+            ],
+          );
+        },
+      );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("로그아웃 오류"))
       );
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -67,9 +158,38 @@ class _SettingPageState extends State<SettingPage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(12.0),
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundImage: NetworkImage(_userData?['profile_img'] ?? ''),
+                  child: GestureDetector(
+                    onTap: _pickImage,
+                    child: Stack(
+                      alignment: Alignment.bottomRight,
+                      children: [
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundImage: NetworkImage(_profileImg),
+                        ),
+                        Positioned(
+                          child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                              color: Colors.blue,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.5),
+                                  blurRadius: 5,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: const Icon(
+                              FontAwesomeIcons.camera,
+                              color: Colors.white,
+                              size: 14.0,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Container(
@@ -77,7 +197,7 @@ class _SettingPageState extends State<SettingPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("${_userData?['nickname'] ?? 'Default Nickname'}",style: CustomTextStyle.label,),
+                      Text(_nickname,style: CustomTextStyle.label,),
                       const SizedBox(height: 8,),
                       Text("email: ${user.email}",style: CustomTextStyle.settingLabel2,),
                       const SizedBox(height: 4,),
