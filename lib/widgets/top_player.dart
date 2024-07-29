@@ -143,7 +143,7 @@ class _TopPlayersWidgetState extends State<TopPlayersWidget> {
 
     return GestureDetector(
       child: Card(
-        color: Colors.blue.shade100,
+        color: Colors.blue.shade50,
         child: Container(
           margin: const EdgeInsets.symmetric(vertical: 4,horizontal: 4),
           width: 100,

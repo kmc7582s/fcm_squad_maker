@@ -75,20 +75,14 @@ class _HomePageState extends State<HomePage> {
         onRefresh: _refreshData,
         child: CustomScrollView(
           slivers: <Widget>[
-            SliverAppBar(
+            const SliverAppBar(
               backgroundColor: Colors.white,
               floating: true,
-              title: const Text(
+              title: Text(
                 "홈",
                 style: CustomTextStyle.appbarTitle,
               ),
               centerTitle: false,
-              actions: [
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.notifications_none_outlined),
-                ),
-              ],
             ),
             SliverToBoxAdapter(
               child: Container(

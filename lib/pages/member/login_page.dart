@@ -77,6 +77,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
         body: SingleChildScrollView(
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -95,17 +96,16 @@ class _LoginPageState extends State<LoginPage> {
                     style: CustomTextStyle.loginTitle,
                   ).animate(adapter: ValueAdapter(0.5)).shimmer(
                       colors: [
-                        const Color(0xFF0fff37),
-                        const Color(0xFF15ff4c),
-                        const Color(0xFF1aff61),
-                        const Color(0xFF20ff75),
-                        const Color(0xFF26ff8a),
-                        const Color(0xFF2bff9f),
-                        const Color(0xFF31ffb4),
-                        const Color(0xFF37ffc8),
+                        const Color(0xFFFFFF00),
+                        const Color(0xFF00FF00),
+                        const Color(0xFF00FFFF),
+                        const Color(0xFF0033FF),
+                        const Color(0xFFFF00FF),
+                        const Color(0xFFFF0000),
+                        const Color(0xFFFFFF00),
                       ]
                   ).animate(onPlay: (controller) => controller.repeat(reverse: true))
-                      .saturate(delay: 1.seconds, duration: 1.seconds)
+                      .saturate(delay: 1.seconds, duration: 2.seconds)
                       .then()
                       .tint(color: const Color(0xFF80DDFF)),
                 ],
@@ -117,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
               right: 20,
               child: Card(
                 elevation: 6,
-                color: Colors.white,
+                color: Colors.grey.shade200,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -171,7 +171,14 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       ElevatedButton(
                           onPressed: () => _signIn(),
-                          child: const Text("로그인")
+                          child: const Text("로그인", style: CustomTextStyle.signUplabel),
+                        style: ElevatedButton.styleFrom(
+                            minimumSize: Size(400, 50),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)
+                            ),
+                            backgroundColor: Colors.black
+                        ),
                       ),
                       Text(_statusMessage, style: TextStyle(color: Colors.red),)
                     ],

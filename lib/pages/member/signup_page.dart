@@ -147,7 +147,9 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Text("FCM 스쿼드 메이커"),
         leading: IconButton(
           icon: Icon(Icons.chevron_left),
@@ -156,7 +158,6 @@ class _SignupPageState extends State<SignupPage> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          color: const Color(0xFF2A2B2F),
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           child: Column(
@@ -166,17 +167,18 @@ class _SignupPageState extends State<SignupPage> {
                 child: InkWell(
                   onTap: _pickImage,
                   child: CircleAvatar(
+                    backgroundColor: Colors.grey.shade300,
                     radius: 50,
                     backgroundImage: selectedImage != null ? FileImage(File(selectedImage!.path)) : null,
-                    child: selectedImage == null ? IconButton(onPressed: _pickImage, icon: Icon(Icons.image),iconSize: 50,) : null,
+                    child: selectedImage == null ? IconButton(onPressed: _pickImage, icon: Icon(Icons.image),iconSize: 40,color: Colors.black,) : null,
                   ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Card(
+                  color: Colors.grey.shade200,
                   elevation: 6,
-                  color: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
@@ -237,9 +239,9 @@ class _SignupPageState extends State<SignupPage> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)
                             ),
-                            backgroundColor: Colors.blue
+                            backgroundColor: Colors.black
                           ),
-                          child: const Text("Sign Up", style: CustomTextStyle.label),
+                          child: const Text("Sign Up", style: CustomTextStyle.signUplabel),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 14,left: 8,right: 8),

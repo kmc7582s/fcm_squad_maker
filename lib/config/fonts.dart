@@ -18,11 +18,17 @@ class CustomTextStyle {
       letterSpacing: 1.6,
       color: Colors.black);
 
+  static const signUplabel = TextStyle(fontFamily: "Pretendard",
+      fontWeight: FontWeight.w600,
+      fontSize: 14,
+      letterSpacing: 1,
+      color: Colors.white);
+
   static const sublabel = TextStyle(fontFamily: "Pretendard",
       fontWeight: FontWeight.w400,
       fontSize: 12,
       letterSpacing: 1,
-      color: Colors.blue);
+      color: Colors.black);
 
   static const settingTitle = TextStyle(fontFamily: "Pretendard",
       fontWeight: FontWeight.w700,
