@@ -47,7 +47,9 @@ class _EditPasswordPageState extends State<EditPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Text("비밀번호 변경"),
       ),
       body: SingleChildScrollView(
@@ -55,7 +57,7 @@ class _EditPasswordPageState extends State<EditPasswordPage> {
           padding:EdgeInsets.only(top:200,left: 30, right: 30),
           child: Card(
             elevation: 6,
-            color: Colors.white,
+            color: Colors.grey.shade100,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
@@ -76,7 +78,7 @@ class _EditPasswordPageState extends State<EditPasswordPage> {
                   padding: const EdgeInsets.only(left: 10, right: 10, bottom: 8, top: 10),
                   child: textField("이메일을 입력해주세요.", _emailController, false),
                 ),
-                Text("비밀번호는 6개월마다 변경하는 것을 권장합니다.", style: TextStyle(color: Colors.grey.shade500),),
+                Text("비밀번호는 6개월마다 변경하는 것을 권장합니다.", style: TextStyle(color: Colors.grey.shade700),),
                 SizedBox(height: 20,),
                 Text(statusMessage, style: CustomTextStyle.statemessage,),
                 _isLoading ?

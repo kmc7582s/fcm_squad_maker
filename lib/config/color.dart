@@ -6,7 +6,7 @@ class Palette {
   static const Color fwColor = Color(0xFFFF0000);
   static const Color mfColor = Color(0xFF2DB400);
   static const Color dfColor = Color(0xFF0000FF);
-  static const Color gkColor = Color(0xFFFFFF00);
+  static const Color gkColor = Color(0xFFFFD400);
 
   static const Color base1 = Color(0xFF000000);
   static const Color base2 = Color(0xFF7C7C7C);

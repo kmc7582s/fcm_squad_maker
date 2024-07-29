@@ -47,7 +47,9 @@ class _EditNicknamePageState extends State<EditNicknamePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         leading: IconButton(
           icon: const Icon(Icons.chevron_left),
           onPressed: () async {
@@ -62,7 +64,7 @@ class _EditNicknamePageState extends State<EditNicknamePage> {
           padding:EdgeInsets.only(top:200,left: 30, right: 30),
           child: Card(
             elevation: 6,
-            color: Colors.white,
+            color: Colors.grey.shade100,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),

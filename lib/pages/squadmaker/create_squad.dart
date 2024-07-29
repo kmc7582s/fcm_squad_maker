@@ -154,6 +154,7 @@ class _CreateSquadPageState extends State<CreateSquadPage> {
             Padding(
               padding: const EdgeInsets.only(top: 18, left: 12.0, right: 12),
               child: Card(
+                color: Colors.grey.shade100,
                 child: Column(
                   children: [
                     Padding(
@@ -206,6 +207,7 @@ class _CreateSquadPageState extends State<CreateSquadPage> {
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Card(
+                color: Colors.grey.shade100,
                 child: Column(
                   children: [
                     Padding(
@@ -273,7 +275,7 @@ class _CreateSquadPageState extends State<CreateSquadPage> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)
                   ),
-                  backgroundColor: Colors.blue
+                  backgroundColor: Colors.black
               ),
               child: const Text("생성", style: TextStyle(color: Colors.white)),
             ),
