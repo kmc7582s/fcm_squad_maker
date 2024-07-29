@@ -20,7 +20,9 @@ class _SquadListPageState extends State<SquadListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: const Text(
           "내 스쿼드",
           style: CustomTextStyle.appbarTitle,
@@ -63,8 +65,6 @@ class _SquadListPageState extends State<SquadListPage> {
                     'teams': value['teams'],
                     'formation': value['formation'],
                     'team_logo': value['team_logo'],
-                    'average_ovr' : '',
-                    'player' : '',
                   });
                 });
                 return ListView.separated(
@@ -76,10 +76,6 @@ class _SquadListPageState extends State<SquadListPage> {
                       subtitle: Text('평균 OVR | Formation: ${squadList[index]['formation']}'),
                       trailing: PopupMenuButton<int>(
                         itemBuilder: (context) => [
-                          const PopupMenuItem(
-                            value: 1,
-                            child: Text("찜하기"),
-                          ),
                           PopupMenuItem(
                             value: 2,
                             child: Text("삭제"),
@@ -88,7 +84,7 @@ class _SquadListPageState extends State<SquadListPage> {
                         ],
                         icon: Icon(Icons.more_vert),
                       ),
-                      onTap: () =>  Navigator.of(context).push(MaterialPageRoute(builder: (context) => SquadMakerPage(player: '', squadId: squadList[index]['id']))),
+                      onTap: () =>  Navigator.of(context).push(MaterialPageRoute(builder: (context) => SquadMakerPage(squadId: squadList[index]['id']))),
                     );
                   },
                   separatorBuilder: (context,index) {

@@ -5,6 +5,7 @@ import 'package:fcmobile_squad_maker/config/fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:gauge_indicator/gauge_indicator.dart';
 
 class PlayerDetailPage extends StatefulWidget {
@@ -120,7 +121,9 @@ class _PlayerDetailPageState extends State<PlayerDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Text(player.name, style: CustomTextStyle.appbarTitle,),
         centerTitle: false,
         leading: IconButton(
@@ -275,6 +278,24 @@ class _PlayerDetailPageState extends State<PlayerDetailPage> {
                 ],
               ),
             ),
+          ),
+          Row(
+            children: [
+              RatingBar.builder(
+                minRating: 1,
+                direction: Axis.horizontal,
+                allowHalfRating: true,
+                updateOnDrag: true,
+                itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                itemBuilder: (context, _) => const Icon(
+                  Icons.star,
+                  color: Colors.amber,
+                ),
+                onRatingUpdate: (rating) {
+                  print(rating);
+                },
+              ),
+            ],
           ),
         ],
       ),

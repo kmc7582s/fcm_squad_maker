@@ -87,18 +87,16 @@ class _SettingPageState extends State<SettingPage> {
   Future<void> _fetchUserData() async {
     final DatabaseReference _database = _userUpdateRef.child(user.uid);
 
-    if (user != null) {
-      _database.onValue.listen((event) {
-        final snapshot = event.snapshot;
-        if (snapshot.exists) {
-          final data = snapshot.value as Map<dynamic, dynamic>;
-          setState(() {
-            _nickname = data['nickname'] ?? 'Unknown';
-            _profileImg = data['profile_img'] ?? 'Unknown';
-          });
-        }
-      });
-    }
+    _database.onValue.listen((event) {
+      final snapshot = event.snapshot;
+      if (snapshot.exists) {
+        final data = snapshot.value as Map<dynamic, dynamic>;
+        setState(() {
+          _nickname = data['nickname'] ?? 'Unknown';
+          _profileImg = data['profile_img'] ?? 'Unknown';
+        });
+      }
+    });
   }
 
   // 로그아웃
@@ -144,7 +142,9 @@ class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: const Text(
           "내 정보",
           style: CustomTextStyle.appbarTitle,
@@ -221,7 +221,7 @@ class _SettingPageState extends State<SettingPage> {
               onTap: () {},
             ),
             ListTile(
-              title: const Text("내가 좋아요 한 글",  style: CustomTextStyle.settingLabel),
+              title: const Text("내 평가",  style: CustomTextStyle.settingLabel),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {},
             ),

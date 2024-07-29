@@ -19,6 +19,5 @@ class IconSrc {
   static const String? _kFontPkg = null;
 
   static const IconData versus = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData bell_alt = IconData(0xf0f3, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData shoe_prints = IconData(0xea98, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

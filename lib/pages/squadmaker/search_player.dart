@@ -183,7 +183,7 @@ class _SearchState extends State<Search> {
                             itemBuilder: (context) => [
                               PopupMenuItem(
                                 child: Text("선수 선택"),
-                                onTap: () => Navigator.pop(context, player),
+                                onTap: () => Navigator.pop(context, player.id),
                               ),
                             ],
                             icon: Icon(Icons.add),

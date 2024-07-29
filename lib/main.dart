@@ -17,6 +17,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform
   );
+
   runApp(const MyApp());
 }
 
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      color: Colors.grey.shade100,
       debugShowCheckedModeBanner: false,
       title: "FC모바일 스쿼드 메이커",
       home: StreamBuilder<User?>(

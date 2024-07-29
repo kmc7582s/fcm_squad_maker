@@ -22,7 +22,7 @@ _$PlayerImpl _$$PlayerImplFromJson(Map<String, dynamic> json) => _$PlayerImpl(
       physical: (json['physical'] as num).toInt(),
       l_foot: (json['l_foot'] as num).toInt(),
       r_foot: (json['r_foot'] as num).toInt(),
-      likes: json['likes'],
+      likes: json['likes'] ?? const {},
       img: json['img'] as String? ?? '',
     );
 

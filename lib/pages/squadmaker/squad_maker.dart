@@ -9,92 +9,73 @@ import 'package:flutter/material.dart';
 import '../../config/assets.dart';
 
 class SquadMakerPage extends StatefulWidget {
-  final dynamic player;
   final String squadId;
 
-  const SquadMakerPage({super.key, required this.player, required this.squadId});
+  const SquadMakerPage({super.key, required this.squadId});
 
   @override
-  State<SquadMakerPage> createState() => _SquadMakerPageState(player: player, squadId: squadId);
+  State<SquadMakerPage> createState() => _SquadMakerPageState(squadId: squadId);
 }
 
 class _SquadMakerPageState extends State<SquadMakerPage> with SingleTickerProviderStateMixin {
-  _SquadMakerPageState({required this.player, required this.squadId});
+  _SquadMakerPageState({required this.squadId});
 
   final String squadId;
-  final dynamic player;
   List<List<dynamic>> formation = [];
   final _auth = FirebaseAuth.instance;
   String? formationString;
   int? lastRowIdx;
   int? lastColIdx;
 
+  final List<String> fw_2 = ['ST', 'ST'];
+  final List<String> fw_3 = ['LW', 'ST', 'RW'];
+  final List<String> fw_4 = ['LW', 'ST', 'ST', 'RW'];
+
+  final List<String> mf_2 = ['CM', 'CM'];
+  final List<String> mf_3 = ['CM', 'CM', 'CM'];
+  final List<String> mf_4 = ['LM', 'CM', 'CM', 'RM'];
+  final List<String> mf_5 = ['LM', 'CDM', 'CDM', 'CM', 'RM'];
+
+  final List<String> df_3 = ['CB', 'CB', "CB"];
+  final List<String> df_4 = ['LB', 'CB', "CB", "RB"];
+  final List<String> df_5 = ['LWB', 'CB', "CB", "CB", "RWB"];
+
+  String? selectedOption;
+  String selectedFormation = '3back';
+  final List<String> categories = ['3back', '4back', '5back'];
+  final Map<String, List<String>> formationList = {
+    '3back': ['3-4-3','3-5-2'],
+    '4back': ['4-2-4', '4-3-3', '4-4-2'],
+    '5back': ['5-3-2']
+  };
+
   @override
   void initState () {
     super.initState();
     _loadClass();
     _fetchFormation();
+    _loadPlayers();
+    selectedOption = formationList[selectedFormation]!.first;
   }
 
-  void setFormation(String formationString) {
-    List<String> positions = formationString.split('-');
-
-    int fwCount = int.parse(positions[0]);
-    int mfCount = int.parse(positions[1]);
-    int dfCount = int.parse(positions[2]);
-
-    List<List<dynamic>> newFormation = [
-      List.filled(dfCount, null),
-      List.filled(mfCount, null),
-      List.filled(fwCount, null),
-      [null], // Goalkeeper position
-    ];
-
-    setState(() {
-      this.formationString = formationString;
-      formation = newFormation;
-    });
+  @override
+  void dispose() {
+    super.dispose();
   }
 
-  Future<void> _navigateAndAddPlayer(BuildContext context, int rowIdx, int colIdx) async {
-    final Player? player = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Search()));
-    bool isDuplicate = formation.any((row) => row.contains(player));
-    if (isDuplicate) {
-      if (lastRowIdx != null && lastColIdx != null) {
-        setState(() {
-          formation[lastRowIdx!][lastColIdx!] = player;
-        });
-      }
-    } else {
+  // 선수 데이터 호출
+  List<Player> players = [];
+
+  Future<void> _loadPlayers() async {
+    final snapshot = await FirebaseDatabase.instance.ref('player').get();
+    if (snapshot.exists) {
+      final playerList = snapshot.value as List<dynamic>;
       setState(() {
-        formation[rowIdx][colIdx] = player;
+        players = playerList
+            .map((playerJson) =>
+            Player.fromJson(Map<String, dynamic>.from(playerJson)))
+            .toList();
       });
-    }
-  }
-
-  Future<void> _fetchFormation() async {
-    User? user = _auth.currentUser;
-    if (user != null) {
-      DatabaseReference formationRef = FirebaseDatabase.instance
-          .ref()
-          .child('users')
-          .child(user.uid)
-          .child('squads')
-          .child(squadId)
-          .child('formation');
-
-      formationRef.once().then((event) {
-        if (event.snapshot.exists) {
-          String? formationString = event.snapshot.value as String?;
-          if (formationString != null) {
-            setFormation("${formationString}");
-          }
-        }
-      }).catchError((error) {
-        print('Error fetching formation: $error');
-      });
-
-      print(formationString);
     }
   }
 
@@ -123,20 +104,147 @@ class _SquadMakerPageState extends State<SquadMakerPage> with SingleTickerProvid
     return '';
   }
 
-  // 파이어베이스 데이터 저장
-  Future<void> Squad() async {
-    User? user = _auth.currentUser;
-    dynamic _formation = formation;
-    if (user != null) {
+
+  void setFormation(String formationString) {
+    List<String> positions = formationString.split('-');
+
+    int fwCount = int.parse(positions[0]);
+    int mfCount = int.parse(positions[1]);
+    int dfCount = int.parse(positions[2]);
+
+    List<List<dynamic>> newFormation = [
+      List.filled(dfCount, null),
+      List.filled(mfCount, null),
+      List.filled(fwCount, null),
+      [null], // Goalkeeper position
+    ];
+
+    setState(() {
+      this.formationString = formationString;
+      formation = newFormation;
+    });
+
+    if (formation.isNotEmpty) {
+      for (int i = 0; i < newFormation.length; i++) {
+        for (int j = 0; j < newFormation[i].length; j++) {
+          if (i < formation.length && j < formation[i].length) {
+            newFormation[i][j] = formation[i][j] ?? newFormation[i][j];
+          }
+        }
+      }
+    }
+  }
+
+  Future<void> _navigateAndAddPlayer(BuildContext context, int rowIdx, int colIdx) async {
+    final selectedPlayer = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Search()));
+
+    if (selectedPlayer != null) {
+      // Fetch player details from Firebase
+      final playerId = selectedPlayer;
+      Player playerInfo = players[playerId];
+
+      bool isDuplicate = formation.any((row) => row.contains(playerInfo));
+
+      // Add player to the formation
       setState(() {
-        DatabaseReference database = FirebaseDatabase.instance.ref('users').child(user.uid).child('squads').child(squadId);
-        database.update({
-          'average_ovr' : 1,
-          'player' : {_formation},
-        });
+        if (isDuplicate) {
+          if (lastRowIdx != null && lastColIdx != null) {
+            formation[lastRowIdx!][lastColIdx!] = playerInfo;
+          }
+        } else {
+          formation[rowIdx][colIdx] = playerInfo;
+        }
       });
     }
-    print(formation);
+  }
+
+  Future<void> _fetchFormation() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      DatabaseReference formationRef = FirebaseDatabase.instance
+          .ref()
+          .child('users')
+          .child(user.uid)
+          .child('squads')
+          .child(squadId);
+
+      try {
+        // 포메이션 문자열 가져오기
+        final formationSnapshot = await formationRef.child('formation').once();
+        if (formationSnapshot.snapshot.exists) {
+          String? formationString = formationSnapshot.snapshot.value as String?;
+          if (formationString != null) {
+            setFormation(formationString); // 기존 포메이션 유지
+          }
+        }
+
+        // 선수 데이터 가져오기
+        final squadSnapshot = await formationRef.child('squad').once();
+        if (squadSnapshot.snapshot.exists) {
+          Map<dynamic, dynamic> data = squadSnapshot.snapshot.value as Map<dynamic, dynamic>;
+
+          List<dynamic> playerData = data['player'] as List<dynamic>;
+
+          final newFormation = formation.asMap().entries.map((entry) {
+            int rowIdx = entry.key;
+            List<dynamic> row = playerData.length > rowIdx ? playerData[rowIdx] as List<dynamic>? ?? [] : [];
+
+            return row.asMap().entries.map((rowEntry) {
+              int colIdx = rowEntry.key;
+              dynamic item = rowEntry.value;
+
+              if (item is Map) {
+                return Player?.fromJson(Map<String, dynamic>.from(item));
+              }
+              return null;
+            }).toList();
+          }).toList();
+
+          setState(() {
+            formation = newFormation; // 데이터 업데이트
+          });
+
+        } else {
+          // squad 데이터가 없을 경우 기존 데이터 유지
+          setState(() {
+            formation = formation.map((row) => row.map((item) => item).toList()).toList();
+          });
+        }
+      } catch (error) {
+        print('Failed to fetch formation: $error');
+      }
+    }
+  }
+
+  // 스쿼드 저장
+  Future<void> saveFormation(List<List<dynamic>> formation) async {
+    User? user = _auth.currentUser;
+    // 변환된 JSON 형태로 저장하기
+    final formationJson = formation.map((row) {
+      return row.map((item) {
+        if (item is Player) {
+          return item.toJson();
+        }
+        return item;
+      }).toList();
+    }).toList();
+
+    // Firebase 데이터베이스 참조
+    DatabaseReference formationRef = FirebaseDatabase.instance
+        .ref()
+        .child('users')
+        .child(user!.uid)
+        .child('squads')
+        .child(squadId);
+
+    // Firebase에 저장
+    await formationRef.child('squad').set({
+      'player' : formationJson,
+    }).then((_) {
+      print('Formation saved successfully');
+    }).catchError((error) {
+      print('Failed to save formation: $error');
+    });
   }
 
   @override
@@ -144,24 +252,25 @@ class _SquadMakerPageState extends State<SquadMakerPage> with SingleTickerProvid
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () => {
-            Squad(),
-            Navigator.pop(context)
+          onPressed: () async => {
+            await saveFormation(formation),
+            Navigator.pop(context, true)
           },
           icon: const Icon(Icons.chevron_left),
         ),
         title: const Text("스쿼드 메이커"),
         centerTitle: false,
         actions: [
-          IconButton(
-              icon:Icon(Icons.save),
-              onPressed: () {
-                print(player);
-                print(formation);
-                Squad();
-              }
-          ),
-          IconButton(icon:Icon(Icons.menu),onPressed: () {}),
+            PopupMenuButton<int>(
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                    value: 1,
+                    child: Text("포메이션 변경"),
+                    onTap: _changeFormation
+                ),
+              ],
+              icon: Icon(Icons.menu),
+            )
         ],
       ),
       body: Column(
@@ -179,7 +288,7 @@ class _SquadMakerPageState extends State<SquadMakerPage> with SingleTickerProvid
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
-                Padding(
+                const Padding(
                   padding: EdgeInsets.only(right: 10),
                   child: Text(
                     "평균 Overall",
@@ -234,33 +343,117 @@ class _SquadMakerPageState extends State<SquadMakerPage> with SingleTickerProvid
       children: [
         player != null && player.position != null ? Text(player.position, style: TextStyle(color: positionColor(player.position), fontFamily: "Pretendard", fontSize: 15, fontWeight: FontWeight.w600)) : Text(""),
         InkWell(
-          child: player != null && player.img != null ?
-          Stack(
-            alignment: Alignment.center,
-            children:
-            [
-              Image.network(getClassUrl(player.grade), width: 70,height: 70,),
-              Image.network(player.img, width: 70,height: 70,),
-            ],
-          )
-              : Container(
-            width: 40,
-            height: 40,
-            decoration: const BoxDecoration(
-              color: Palette.basepl,
-              shape: BoxShape.circle,
+            child: player != null && player.img != null ?
+            Stack(
+              alignment: Alignment.center,
+              children:
+              [
+                Image.network(getClassUrl(player.grade), width: 70,height: 70,),
+                Image.network(player.img, width: 70,height: 70,),
+              ],
+            )
+                : Container(
+              width: 40,
+              height: 40,
+              decoration: const BoxDecoration(
+                color: Palette.basepl,
+                shape: BoxShape.circle,
+              ),
+              child: const Center(
+                child: Icon(Icons.add),
+              ),
             ),
-            child: const Center(
-              child: Icon(Icons.add),
-            ),
-          ),
-          onTap: () {
-            _navigateAndAddPlayer(context, rowIdx, colIdx);
-            print(formation);
-          }
+            onTap: () {
+              _navigateAndAddPlayer(context, rowIdx, colIdx);
+              print(formation);
+            }
         ),
         Text(player != null ? player.name : "player", style: CustomTextStyle.playerName,),
       ],
+    );
+  }
+
+  _changeFormation() {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('포메이션 변경'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 6),
+                      child: Container(
+                        width: 120,
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.black),
+                          color: Colors.white,
+                        ),
+                        child: DropdownButton<String>(
+                          value: selectedOption,
+                          icon: const Icon(Icons.arrow_drop_down),
+                          iconSize: 24,
+                          elevation: 16,
+                          onChanged: (dynamic newValue) {
+                            setState(() {
+                              selectedOption = newValue;
+                              print(selectedOption);
+                            });
+                          },
+                          items: formationList[selectedFormation]!
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(value: value, child: Text(value));
+                          }).toList(),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Column(
+                children: categories.map((String category) {
+                  return RadioListTile<String>(
+                      title: Text(category),
+                      value: category,
+                      groupValue: selectedFormation,
+                      onChanged: (dynamic value) {
+                        setState(() async {
+                          selectedFormation = value;
+                          selectedOption = formationList[selectedFormation]!.first;
+                        });
+                      });
+                }).toList(),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                try {
+                  Navigator.of(context).pop();
+                  setFormation(selectedFormation);
+                } catch (e) {
+                  print('오류: $e');
+                }
+              },
+              child: const Text('변경'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('닫기'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

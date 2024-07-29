@@ -1,3 +1,4 @@
+import 'package:fcmobile_squad_maker/widgets/marquee.dart';
 import 'package:fcmobile_squad_maker/widgets/player_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
@@ -14,6 +15,7 @@ class PlayerVersus extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0xFFbdc3c7),
         title: Text("선수비교"),
         leading: IconButton(
           icon: Icon(Icons.chevron_left),
@@ -82,23 +84,6 @@ class PlayerVersus extends StatelessWidget {
           ],
         ),
       )
-    );
-  }
-
-  Widget animated_text(String text) {
-    return Container(
-      width: 90,
-      child: Marquee(
-        text: text,
-        velocity: 50.0,
-        blankSpace: 50,
-        startPadding: 4.0,
-        pauseAfterRound: Duration(milliseconds: 2000),
-        accelerationDuration: Duration(seconds: 1),
-        accelerationCurve: Curves.linear,
-        decelerationDuration: Duration(milliseconds: 500),
-        decelerationCurve: Curves.easeOut,
-      ),
     );
   }
 

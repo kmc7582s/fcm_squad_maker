@@ -320,7 +320,7 @@ class _$PlayerImpl implements _Player {
       required this.physical,
       required this.l_foot,
       required this.r_foot,
-      required this.likes,
+      this.likes = const {},
       this.img = ''});
 
   factory _$PlayerImpl.fromJson(Map<String, dynamic> json) =>
@@ -357,6 +357,7 @@ class _$PlayerImpl implements _Player {
   @override
   final int r_foot;
   @override
+  @JsonKey()
   final dynamic likes;
   @override
   @JsonKey()
@@ -448,7 +449,7 @@ abstract class _Player implements Player {
       required final int physical,
       required final int l_foot,
       required final int r_foot,
-      required final dynamic likes,
+      final dynamic likes,
       final String img}) = _$PlayerImpl;
 
   factory _Player.fromJson(Map<String, dynamic> json) = _$PlayerImpl.fromJson;

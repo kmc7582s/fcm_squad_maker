@@ -89,6 +89,20 @@ class CustomTextStyle {
     letterSpacing: 1
   );
 
+  static const content = TextStyle(
+      fontFamily: "Pretendard",
+      fontWeight: FontWeight.w500,
+      fontSize: 16,
+      letterSpacing: 1
+  );
+
+  static const postprofile = TextStyle(
+      fontFamily: "Pretendard",
+      fontWeight: FontWeight.w600,
+      fontSize: 18,
+      letterSpacing: 1
+  );
+
   static const playerName = TextStyle(
     fontFamily: "Pretendard",
     fontWeight: FontWeight.w600,
@@ -114,5 +128,12 @@ class Fonts {
     fontWeight: FontWeight.bold,
     letterSpacing: 1,
     color: Colors.amber
+  );
+
+  static final TextStyle playersmall = GoogleFonts.roboto(
+      fontSize: 12,
+      fontWeight: FontWeight.bold,
+      letterSpacing: 1,
+      color: Colors.amber
   );
 }

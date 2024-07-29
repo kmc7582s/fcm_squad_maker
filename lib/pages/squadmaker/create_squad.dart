@@ -28,9 +28,9 @@ class _CreateSquadPageState extends State<CreateSquadPage> {
 
   final List<String> categories = ['3back', '4back', '5back'];
   final Map<String, List<String>> formation = {
-    '3back': ['3-4-1-2', '3-4-2-1', '3-5-2'],
-    '4back': ['4-2-4', '4-3-3', '4-3-2-1', '4-4-2'],
-    '5back': ['5-2-1-2', '5-2-2-1', '5-3-2']
+    '3back': ['3-4-3','3-5-2'],
+    '4back': ['4-2-4', '4-3-3', '4-4-2'],
+    '5back': ['5-3-2']
   };
 
   List<Leagues> leagues = [];
@@ -110,14 +110,16 @@ class _CreateSquadPageState extends State<CreateSquadPage> {
         'team_logo' : getClubUrl(selectedOption1).toString(),
       });
 
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => SquadMakerPage(player: '', squadId: squadId,)));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => SquadMakerPage(squadId: squadId,)));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: const Text("스쿼드 생성"),
         centerTitle: false,
         leading: IconButton(
@@ -261,6 +263,7 @@ class _CreateSquadPageState extends State<CreateSquadPage> {
                 ),
               ),
             ),
+            SizedBox(height: 40,),
             ElevatedButton(
               onPressed: () {
                 createSquad();
@@ -274,7 +277,6 @@ class _CreateSquadPageState extends State<CreateSquadPage> {
               ),
               child: const Text("생성", style: TextStyle(color: Colors.white)),
             ),
-            SizedBox(height: 20,)
           ],
         ),
       ),

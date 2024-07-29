@@ -21,7 +21,7 @@ class Player with _$Player {
     required int physical,
     required int l_foot,
     required int r_foot,
-    required dynamic likes,
+    @Default({}) dynamic likes,
     @Default('') String img,
   }) = _Player;
 
