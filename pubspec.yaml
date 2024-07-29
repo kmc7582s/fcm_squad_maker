@@ -49,6 +49,7 @@ dependencies:
   rive:
   flutter_rating_bar:
   intl:
+  url_launcher:
   kakao_flutter_sdk_talk: ^1.9.5
 
 

@@ -235,7 +235,6 @@ class _PlayerListPageState extends State<PlayerListPage> {
               ],
             ),
           ),
-          Divider(),
           Expanded(
             child: ListView.builder(
                 itemCount: players.length,
@@ -249,6 +248,7 @@ class _PlayerListPageState extends State<PlayerListPage> {
                     return SizedBox.shrink();
                   } else {
                     return Card(
+                      color: Colors.grey.shade100,
                       child: Row(
                         children: [
                           Visibility(

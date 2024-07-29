@@ -266,7 +266,7 @@ class _SquadMakerPageState extends State<SquadMakerPage> with SingleTickerProvid
                 PopupMenuItem(
                     value: 1,
                     child: Text("포메이션 변경"),
-                    onTap: _changeFormation
+                    onTap: () {}
                 ),
               ],
               icon: Icon(Icons.menu),
@@ -370,90 +370,6 @@ class _SquadMakerPageState extends State<SquadMakerPage> with SingleTickerProvid
         ),
         Text(player != null ? player.name : "player", style: CustomTextStyle.playerName,),
       ],
-    );
-  }
-
-  _changeFormation() {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('포메이션 변경'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 6),
-                      child: Container(
-                        width: 120,
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: Colors.black),
-                          color: Colors.white,
-                        ),
-                        child: DropdownButton<String>(
-                          value: selectedOption,
-                          icon: const Icon(Icons.arrow_drop_down),
-                          iconSize: 24,
-                          elevation: 16,
-                          onChanged: (dynamic newValue) {
-                            setState(() {
-                              selectedOption = newValue;
-                              print(selectedOption);
-                            });
-                          },
-                          items: formationList[selectedFormation]!
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(value: value, child: Text(value));
-                          }).toList(),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Column(
-                children: categories.map((String category) {
-                  return RadioListTile<String>(
-                      title: Text(category),
-                      value: category,
-                      groupValue: selectedFormation,
-                      onChanged: (dynamic value) {
-                        setState(() async {
-                          selectedFormation = value;
-                          selectedOption = formationList[selectedFormation]!.first;
-                        });
-                      });
-                }).toList(),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                try {
-                  Navigator.of(context).pop();
-                  setFormation(selectedFormation);
-                } catch (e) {
-                  print('오류: $e');
-                }
-              },
-              child: const Text('변경'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('닫기'),
-            ),
-          ],
-        );
-      },
     );
   }
 }

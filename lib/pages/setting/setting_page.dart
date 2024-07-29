@@ -11,6 +11,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingPage extends StatefulWidget {
   final User user;
@@ -139,6 +140,15 @@ class _SettingPageState extends State<SettingPage> {
     }
   }
 
+  Future<void> _launchURL() async {
+    final url = Uri.parse("https://forms.gle/qevqY4eEZtKwFRCj8"); // 여기에 Google Form URL을 입력하세요
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -254,7 +264,7 @@ class _SettingPageState extends State<SettingPage> {
             ListTile(
               title: const Text("문의",  style: CustomTextStyle.settingLabel),
               trailing: const Icon(Icons.chevron_right),
-              onTap: () {},
+              onTap: () {_launchURL();},
             ),
             const ListTile(
               title: Text("버전",  style: CustomTextStyle.settingLabel),

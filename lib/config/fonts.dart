@@ -18,6 +18,12 @@ class CustomTextStyle {
       letterSpacing: 1.6,
       color: Colors.black);
 
+  static const ratingLabel = TextStyle(fontFamily: "Pretendard",
+      fontWeight: FontWeight.w700,
+      fontSize: 20,
+      letterSpacing: 1.6,
+      color: Colors.black);
+
   static const signUplabel = TextStyle(fontFamily: "Pretendard",
       fontWeight: FontWeight.w600,
       fontSize: 14,
